@@ -1,0 +1,6 @@
+echo "set i to 0
+repeat while i < 15
+set i to i + 1
+delay 1
+tell application \"System Events\" to keystroke \"k\"
+end repeat" | osascript
