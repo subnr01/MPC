@@ -7,14 +7,15 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
-#include <list>
+#include <list>k
 #include <time.h>
 #include <string>
 #include <sstream>
 #include <fstream>
 #include <algorithm>
+#include <unistd.h>
 #include "StatMerge.h"
-//#include "SegmentMatch.h"
+//#include "SegmentMatch.h"k
 #include "FloatImage.h"
 #include "IntImage.h"
 #include "LinearShapeMatch.h"
@@ -205,7 +206,11 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
 {
 	std::cout << "loading " << actionName << " " << id << std::endl;
 
+
 	std::string totalPrefix = "/Users/priyankakulkarni/Documents/Project/MPC/ActionRecDemoV3/data/" + actionName;
+
+	//std::string totalPrefix = "/Users/admin/data/" + actionName;
+
 
 	ActionInstance* ret = new ActionInstance;
 	ret->tData = new std::vector<FloatImage*>;
@@ -217,8 +222,9 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
 	for(int i = 0; i < count; ++i)
 	{
 		int curNum = 10000 + (100 * id) + i;
-		std::string fname = totalPrefix + "_" + IntToString(curNum) + ".PNG";
-		std::cout << "Filename: " << fname << std::endl;
+    	std::string fname = totalPrefix + "_" + IntToString(curNum) + ".PNG";
+        //std::string fname = "/Users/admin/data/up_10100.PNG";
+        std::cout << "Filename: " << fname << std::endl;
 		IntImage* tempII = new IntImage(cvLoadImage(fname.c_str()));
 		int* c0 = tempII->getChannel(0);
 		FloatImage* tempF = new FloatImage(tempII->width(), tempII->height());
@@ -403,7 +409,7 @@ int main(int argc, char* argv[])
 	for(int i = 0; i < numActions; ++i)
 		timeoutArray[i] = 0;
 	int timeoutPeriodArray[4] = {12, 5, 5, 5};
-
+    
 	std::vector<ActionInstance*> actionInstances;
 
 	// load the template library
@@ -417,15 +423,15 @@ int main(int argc, char* argv[])
 		}
 	}
 	std::cout << "Done loading action library; loaded " << actionInstances.size() << " instances.\n";
-
-	cvWaitKey(1000);
+    
+	cvWaitKey(10000);
 
 	IntImage* timg = renderTemplateFrame(actionInstances[0]->tData, 2);
 	cvNamedWindow( "Template", CV_WINDOW_AUTOSIZE );
 	IplImage* timgipl = timg->getIplImage();
 	cvShowImage("Template", timgipl);
 
-	cvWaitKey();
+	cvWaitKey(10000);
 
 	LinearShapeMatch* lsm = new LinearShapeMatch(process_width, process_height, actionFrames);
 	lsm->setFill(1.0f, true);
@@ -474,7 +480,7 @@ int main(int argc, char* argv[])
 	cvNamedWindow( "Template Locations", CV_WINDOW_AUTOSIZE );
 
 	std::cout << "About to enter main loop.\n";
-
+    
    	// prepare some timing stuff
 	std::list<clock_t> clocktimes(TIME_CALC_FRAMES);
 	clock_t curTime, frontTime;
@@ -497,6 +503,7 @@ int main(int argc, char* argv[])
 
 	clock_t prevTime = clock();
 	curTime = clock();
+
     
 
     //PRIYANKA'S CHANGES
@@ -506,7 +513,7 @@ int main(int argc, char* argv[])
    
     
 
-	// enter main loop-- this runs the display as fast as possible
+    // enter main loop-- this runs the display as fast as possible
 	while(1)
 	{
 		// deal with timing stuff
@@ -538,7 +545,8 @@ int main(int argc, char* argv[])
 		src_r_img->copy(resizedPFrame, true);
 		dest_img->copy(resizedPFrame, true);
 		src_img->copy(resizedSrcFrame, true);
-
+        cvShowImage("Source Video", resizedSrcFrame);
+        cvWaitKey(100000000);
 		// segment it
 		tempSeg = statMerge->doSegmentation(src_r_img->getChannel(0), src_r_img->getChannel(1), src_r_img->getChannel(2), seg_prob);
 		tempSegSizes = statMerge->getSizeArray();
@@ -643,6 +651,9 @@ int main(int argc, char* argv[])
 		std::cout << "Send action: " << sendActionName << std::endl;
 		std::cout << "Best distance: " << bestDist2 << std::endl;
         outfile << sendActionName << "\n";
+        
+       
+        
 		if(sendActionID >= 0)
 		{
 			int keyToSend = actionTypes[sendActionID].sendKey;
