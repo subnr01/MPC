@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>A7EC355C-FD89-4D6E-BAF3-B8CBEBDF6371</string>
+	<key>IDESourceControlProjectName</key>
+	<string>subs1</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>BEA4E73BEC85C37CE93A60A3E2111540ED81A953</key>
+		<string>https://github.com/subnr01/MPC.git</string>
+		<key>E269C7C93068BF40067A80260EE84750C7C843BF</key>
+		<string>https://github.com/subnr01/Projects.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ActionRecDemoV3/subs1/subs1.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>BEA4E73BEC85C37CE93A60A3E2111540ED81A953</key>
+		<string>../../../..</string>
+		<key>E269C7C93068BF40067A80260EE84750C7C843BF</key>
+		<string>../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/subnr01/MPC.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>BEA4E73BEC85C37CE93A60A3E2111540ED81A953</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E269C7C93068BF40067A80260EE84750C7C843BF</string>
+			<key>IDESourceControlWCCName</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>BEA4E73BEC85C37CE93A60A3E2111540ED81A953</string>
+			<key>IDESourceControlWCCName</key>
+			<string>MPC</string>
+		</dict>
+	</array>
+</dict>
+</plist>
