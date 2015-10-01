@@ -1,5 +1,5 @@
 // OpenCVTest.cpp : Defines the entry point for the console application.
-//
+//TEAM 5
 
 #include <opencv/cv.h>
 #include <opencv/cxcore.h>
