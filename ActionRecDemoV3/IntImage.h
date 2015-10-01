@@ -1,8 +1,8 @@
 #ifndef INT_IMAGE
 #define INT_IMAGE
 
-#include <opencv/cv.h>
-#include <opencv/cxcore.h>
+#include "opencv/cv.h"
+#include "opencv/cxcore.h">
 
 class IntImage
 {
