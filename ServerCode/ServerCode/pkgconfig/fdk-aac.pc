@@ -1,0 +1,1 @@
+../../Cellar/fdk-aac/0.1.4/lib/pkgconfig/fdk-aac.pc

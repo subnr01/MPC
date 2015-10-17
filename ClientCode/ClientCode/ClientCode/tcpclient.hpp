@@ -13,8 +13,9 @@
 
 #include <stdio.h>
 
-void startTCPClient(const char *servername, int port);
+int startTCPClient(char *servername, int port);
 void sendvideo(int);
+
 
 
 #endif /* tcpclient_hpp */

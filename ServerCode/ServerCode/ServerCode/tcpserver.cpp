@@ -1,176 +1,170 @@
-//
-//  tcpserver.cpp
-//  ServerCode
-//
-//  Created by Subs on 10/16/15.
-//  Copyright © 2015 Subs. All rights reserved.
-//
-
-#include "tcpserver.hpp"
-#include <iostream>
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
-#include <netdb.h>
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+
+#include <iostream>
+#include <string>
 #include <pthread.h>
 
-#define DEBUG 1
 
-#define BUFSIZE 1024
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
+using namespace std;
+using namespace cv;
 
-/*
- * error - wrapper for perror
- */
-void error(const char *msg) {
-    perror(msg);
-    exit(1);
-}
+Mat     img;
+int     is_data_ready = 0;
+int     listenSock, connectSock;
+int 	listenPort;
 
-int tcpServer(int port) {
-    int parentfd; /* parent socket */
-    int childfd; /* child socket */
-    int portno; /* port to listen on */
-    int clientlen; /* byte size of client's address */
-    struct sockaddr_in serveraddr; /* server's addr */
-    struct sockaddr_in clientaddr; /* client addr */
-    struct hostent *hostp; /* client host info */
-    
-    char *hostaddrp; /* dotted decimal host addr string */
-    int optval; /* flag value for setsockopt */
-    pthread_t child;
-    
-    portno = port;
-    
-    
-    if (DEBUG) {
-        printf("\n Creating the server socket");
-    }
-    parentfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (parentfd < 0) {
-        error("ERROR opening socket");
-       
-    }
-    
-    optval = 1;
-    if (DEBUG) {
-        printf("\n Setting socket options");
-    }
-    setsockopt(parentfd, SOL_SOCKET, SO_REUSEADDR,
-               (const void *)&optval , sizeof(int));
-    
-    
-    if (DEBUG) {
-        printf("\n Build Server IP address");
-    }
-    
-    bzero((char *) &serveraddr, sizeof(serveraddr));
-    serveraddr.sin_family = AF_INET;
-    serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    serveraddr.sin_port = htons((unsigned short)portno);
-   
-    if (DEBUG) {
-        printf("\n Binding server IP");
-    }
-    if (bind(parentfd, (struct sockaddr *) &serveraddr,
-             sizeof(serveraddr)) < 0) {
-            error("ERROR on binding");
-    }
-    
-    if (DEBUG) {
-        printf("\n Listening for server connections");
-    }
-    
-    if (listen(parentfd, 5) < 0) /* allow 5 requests to queue up */
-        error("ERROR on listen");
-    
-    
-    
-    clientlen = sizeof(clientaddr);
-    
-    while (1) {
-        
-        /*
-         * accept: wait for a 
-         * connection request
-         */
-        if (DEBUG) {
-            printf("\n Waiting for a client to connect\n");
-        }
-        childfd = accept(parentfd, (struct sockaddr *) &clientaddr, (socklen_t *) &clientlen);
-        if (childfd < 0) {
-            error("ERROR on accept");
-        }
-        
-        /*
-         * gethostbyaddr: determine who 
-         * sent the message
-         */
-        hostp = gethostbyaddr((const char *)&clientaddr.sin_addr.s_addr,
-                              sizeof(clientaddr.sin_addr.s_addr), AF_INET);
-        
-        if (hostp == NULL) {
-            error("ERROR on gethostbyaddr");
-        }
-        
-        hostaddrp = inet_ntoa(clientaddr.sin_addr);
-        if (hostaddrp == NULL) {
-            error("ERROR on inet_ntoa\n");
-        }
-        
-        printf("\n server established connection with %s (%s)\n",
-               hostp->h_name, hostaddrp);
-        
-      
-        pthread_create(&child, 0, servlet, &childfd);
-        pthread_detach(child);
-        
-    }
-    
-}
+pthread_mutex_t gmutex = PTHREAD_MUTEX_INITIALIZER;
 
-void *servlet(void *arg)
+void* streamServer(void* arg);
+void  quit(string msg, int retval);
+
+int tcpServer(int port)
 {
-    int *childfd = (int*)arg;
-    receiveVideo(childfd);
-    sendresult(childfd);
-    close(*childfd);
+    pthread_t thread_s;
+    int width, height, key;
+    width = 640;
+    height = 480;
+ 
+    listenPort = port;
+    img = Mat::zeros( height,width, CV_8UC1);
+    
+    /* run the streaming server as a separate thread */
+    if (pthread_create(&thread_s, NULL, streamServer, NULL)) {
+        quit("pthread_create failed.", 1);
+    }
+    
+    cout << "\n-->Press 'q' to quit." << endl;
+    namedWindow("stream_server", CV_WINDOW_AUTOSIZE);
+    
+    while(key != 'q') {
+        
+        pthread_mutex_lock(&gmutex);
+        if (is_data_ready) {
+            imshow("stream_server", img);
+            is_data_ready = 0;
+        }
+        pthread_mutex_unlock(&gmutex);
+        key = waitKey(10);
+    }
+    
+    if (pthread_cancel(thread_s)) {
+        quit("pthread_cancel failed.", 1);
+    }
+    
+    destroyWindow("stream_server");
+    quit("NULL", 0);
     return 0;
 }
 
 
-void receiveVideo(int *childfd)
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * This is the streaming server, run as separate thread
+ */
+void* streamServer(void* arg)
 {
-    char buf[BUFSIZE];
-    ssize_t n;
+    struct  sockaddr_in   serverAddr,  clientAddr;
+    socklen_t             clientAddrLen = sizeof(clientAddr);
     
+    /* make this thread cancellable using pthread_cancel() */
+    pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
+    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
     
-    if (n < 0) {
-        error("ERROR reading from socket");
+    if ((listenSock = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
+        quit("socket() failed.", 1);
     }
     
-    if (DEBUG) {
-        printf("server received %zd bytes: %s", n, buf);
-    }
-
-    bzero(buf, BUFSIZE);
+    serverAddr.sin_family = PF_INET;
+    serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    serverAddr.sin_port = htons(listenPort);
     
-    n = read(*childfd, buf, BUFSIZE);
+    int ret = ::bind(listenSock, (struct sockaddr *) &serverAddr,
+         sizeof(serverAddr));
+   
+    if (ret < 0) {
+        quit("bind() failed", 1);
+    }
+    
+    
+    if (listen(listenSock, 5) == -1) {
+        quit("listen() failed.", 1);
+    }
+    
+    int  imgSize = img.total()*img.elemSize();
+    char sockData[imgSize];
+    int  bytes=0;
+    
+    /* start receiving images */
+    while(1)
+    {
+        cout << "-->Waiting for TCP connection on port " << listenPort << " ...\n\n";
+        
+        /* accept a request from a client */
+        if ((connectSock = accept(listenSock, (sockaddr*)&clientAddr, &clientAddrLen)) == -1) {
+            quit("accept() failed", 1);
+        }else{
+            cout << "-->Receiving image from " << inet_ntoa(clientAddr.sin_addr) << ":" << ntohs(clientAddr.sin_port) << "..." << endl;
+        }
+        
+        memset(sockData, 0x0, sizeof(sockData));
+        
+        while(1){
+            
+            for (int i = 0; i < imgSize; i += bytes) {
+                if ((bytes = recv(connectSock, sockData +i, imgSize  - i, 0)) == -1) {
+                    quit("recv failed", 1);
+                }
+            }
+            /* convert the received data to OpenCV's Mat format, thread safe */
+            pthread_mutex_lock(&gmutex);
+            for (int i = 0;  i < img.rows; i++) {
+                for (int j = 0; j < img.cols; j++) {
+                    (img.row(i)).col(j) = (uchar)sockData[((img.cols)*i)+j];
+                }
+            }
+            is_data_ready = 1;
+            memset(sockData, 0x0, sizeof(sockData));
+            pthread_mutex_unlock(&gmutex);
+        }
+    }
+    
+    /* have we terminated yet? */
+    pthread_testcancel();
+    
+    /* no, take a rest for a while */
+    usleep(1000);
+    
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * This function provides a way to exit nicely from the system
+ */
+void quit(string msg, int retval)
+{
+    if (retval == 0) {
+        cout << (msg == "NULL" ? "" : msg) << "\n" <<endl;
+    } else {
+        cerr << (msg == "NULL" ? "" : msg) << "\n" <<endl;
+    }
+    
+    if (listenSock){
+        close(listenSock);
+    }
+    
+    if (connectSock){
+        close(connectSock);
+    }
+    
+    if (!img.empty()){
+        (img.release());
+    }
+    
+    pthread_mutex_destroy(&gmutex);
+    exit(retval);
 }
 
-
-
-void sendresult(int *childfd) {
-    char buf[BUFSIZE];
-    ssize_t n;
-    n = write(*childfd, "Received", strlen(buf));
-    if (n < 0) {
-        error("ERROR writing to socket");
-    }
-
-}

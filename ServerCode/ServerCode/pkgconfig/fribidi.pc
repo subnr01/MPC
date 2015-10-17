@@ -1,0 +1,1 @@
+../../Cellar/fribidi/0.19.7/lib/pkgconfig/fribidi.pc

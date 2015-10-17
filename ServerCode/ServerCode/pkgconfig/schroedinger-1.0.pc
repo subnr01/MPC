@@ -1,0 +1,1 @@
+../../Cellar/schroedinger/1.0.11/lib/pkgconfig/schroedinger-1.0.pc

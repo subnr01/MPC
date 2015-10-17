@@ -423,14 +423,14 @@ int processVideo(int argc, char* argv[])
 		}
 	}
 	std::cout << "Done loading action library; loaded " << actionInstances.size() << " instances.\n";
-    
+    cvWaitKey(1000);
 	
 	IntImage* timg = renderTemplateFrame(actionInstances[0]->tData, 2);
 	cvNamedWindow( "Template", CV_WINDOW_AUTOSIZE );
 	IplImage* timgipl = timg->getIplImage();
 	cvShowImage("Template", timgipl);
 
-	cvWaitKey(10000);
+	cvWaitKey();
 
 	LinearShapeMatch* lsm = new LinearShapeMatch(process_width, process_height, actionFrames);
 	lsm->setFill(1.0f, true);
@@ -507,8 +507,8 @@ int processVideo(int argc, char* argv[])
 
    
     
-    std::ofstream outfile;
-    outfile.open("/Users/priyankakulkarni/Documents/test.txt", std::ios_base::app);
+    //std::ofstream outfile;
+    //outfile.open("/Users/priyankakulkarni/Documents/test.txt", std::ios_base::app);
    
     
 
@@ -634,22 +634,15 @@ int processVideo(int argc, char* argv[])
 		{
 			sendActionID = bestActionID;
 			sendActionName = actionTypes[sendActionID].actionName;
-			//timeoutArray[bestActionID] = timeoutPeriod;
 			timeoutArray[bestActionID] = timeoutPeriodArray[bestActionID];
 		}
 
 		for(int i = 0; i < numActions; ++i)
 			timeoutArray[i] -= 1;
 
-		// get the best one...
-		//ActionInstance* best = actionInstances[0];
-		//std::string bestAction = actionTypes[best->actionType].actionName;
-		//std::cout << "Best action: " << bestAction << " " << best->id << " with a distance of " << best->dist << std::endl;
-		//std::cout << "Real best dist: " << bestDist << std::endl;
-		std::cout << "Best action: " << bestAction << std::endl;
+        std::cout << "Best action: " << bestAction << std::endl;
 		std::cout << "Send action: " << sendActionName << std::endl;
 		std::cout << "Best distance: " << bestDist2 << std::endl;
-        outfile << sendActionName << "\n";
         
        
         
@@ -698,7 +691,7 @@ int processVideo(int argc, char* argv[])
 		{
             std::cout << "Closing " << std::endl;
             
-            outfile.close();
+            //outfile.close();
 
 			// quit
 			break;
