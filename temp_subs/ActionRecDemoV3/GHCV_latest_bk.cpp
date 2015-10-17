@@ -1,13 +1,13 @@
 // OpenCVTest.cpp : Defines the entry point for the console application.
 //TEAM 5
 
-#include "opencv/cv.h"
-#include "opencv/cxcore.h"
-#include "opencv/highgui.h"
+#include <opencv/cv.h>
+#include <opencv/cxcore.h>
+#include <opencv/highgui.h>
 #include <stdio.h>
 #include <iostream>
 #include <vector>
-#include <list>
+#include <list>k
 #include <time.h>
 #include <string>
 #include <sstream>
@@ -19,7 +19,6 @@
 #include "FloatImage.h"
 #include "IntImage.h"
 #include "LinearShapeMatch.h"
-#include <fstream>
 
 const double TIME_CALC_FRAMES = 1;
 
@@ -206,11 +205,7 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
 {
 	std::cout << "loading " << actionName << " " << id << std::endl;
 
-
-	std::string totalPrefix = "/Users/priyankakulkarni/Documents/Project/MPC/ActionRecDemoV3/data/" + actionName;
-
-	//std::string totalPrefix = "/Users/admin/data/" + actionName;
-
+	std::string totalPrefix = "/Users/admin/data/" + actionName;
 
 	ActionInstance* ret = new ActionInstance;
 	ret->tData = new std::vector<FloatImage*>;
@@ -235,7 +230,6 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
 				tempF->data[p] = -1.0f;
 				ret->tmass += 1.0f;
 			}
-            
 			else
 				tempF->data[p] = 1.0f;
 		}
@@ -353,7 +347,7 @@ IntImage* renderTemplateFrame(std::vector<FloatImage*>* tData, int f)
 	return ret;
 }
 
-int processVideo(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
 	int cameraid; // = 1;
 	int writeFCount = 0;
@@ -424,7 +418,8 @@ int processVideo(int argc, char* argv[])
 	}
 	std::cout << "Done loading action library; loaded " << actionInstances.size() << " instances.\n";
     
-	
+	cvWaitKey(10000);
+
 	IntImage* timg = renderTemplateFrame(actionInstances[0]->tData, 2);
 	cvNamedWindow( "Template", CV_WINDOW_AUTOSIZE );
 	IplImage* timgipl = timg->getIplImage();
@@ -436,9 +431,7 @@ int processVideo(int argc, char* argv[])
 	lsm->setFill(1.0f, true);
 
 	// get access to webcam
-	//CvCapture* srcVideoCapture = cvCaptureFromCAM( cameraid );
-    
-    CvCapture* srcVideoCapture = cvCaptureFromFile("output.avi");
+	CvCapture* srcVideoCapture = cvCaptureFromCAM( cameraid );
 
 	float scale_x = display_width / process_width;
 	float scale_y = display_height / process_height;
@@ -502,16 +495,6 @@ int processVideo(int argc, char* argv[])
 
 	clock_t prevTime = clock();
 	curTime = clock();
-
-    
-
-   
-    
-    std::ofstream outfile;
-    outfile.open("/Users/priyankakulkarni/Documents/test.txt", std::ios_base::app);
-   
-    
-
     // enter main loop-- this runs the display as fast as possible
 	while(1)
 	{
@@ -528,13 +511,8 @@ int processVideo(int argc, char* argv[])
 		std::cout << "avg_delay: " << avg_delay << std::endl;
 		std::cout << "fps: " << fps << std::endl;
 
-
-        
-        
 		// grab a frame
 		rawFrame = cvQueryFrame(srcVideoCapture);
-       
-        
 		cvResize(rawFrame, resizedSrcFrame);
 		cvResize(rawFrame, resizedPFrame);
 
@@ -545,8 +523,8 @@ int processVideo(int argc, char* argv[])
 		dest_img->copy(resizedPFrame, true);
 		src_img->copy(resizedSrcFrame, true);
         cvShowImage("Source Video", resizedSrcFrame);
-       
-        // segment it
+        cvWaitKey(100000000);
+		// segment it
 		tempSeg = statMerge->doSegmentation(src_r_img->getChannel(0), src_r_img->getChannel(1), src_r_img->getChannel(2), seg_prob);
 		tempSegSizes = statMerge->getSizeArray();
 		src_segmentation->copyChannel(tempSeg, 0);
@@ -649,10 +627,6 @@ int processVideo(int argc, char* argv[])
 		std::cout << "Best action: " << bestAction << std::endl;
 		std::cout << "Send action: " << sendActionName << std::endl;
 		std::cout << "Best distance: " << bestDist2 << std::endl;
-        outfile << sendActionName << "\n";
-        
-       
-        
 		if(sendActionID >= 0)
 		{
 			int keyToSend = actionTypes[sendActionID].sendKey;
@@ -660,7 +634,6 @@ int processVideo(int argc, char* argv[])
 			{
 				std::string sendString = IntToString(keyToSend) + "\n";
 				write(3, sendString.c_str(), sendString.size());
-    
 			}
 		}
 
@@ -696,14 +669,10 @@ int processVideo(int argc, char* argv[])
 		std::cout << "key : " << (keyPressed & 255) << std::endl;
 		if( (keyPressed & 255) == 27 ) // esc key
 		{
-            std::cout << "Closing " << std::endl;
-            
-            outfile.close();
-
 			// quit
 			break;
 		}
 	}
-    
+
 	return 0;
 }

@@ -4,22 +4,15 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>subs1.xcscheme</key>
+		<key>ServerCode.xcscheme</key>
 		<dict>
-			<key>isShown</key>
-			<true/>
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>8472954F1BD25553003AB766</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>84B6D3651BA338F80040251A</key>
+		<key>847295261BD14437003AB766</key>
 		<dict>
 			<key>primary</key>
 			<true/>

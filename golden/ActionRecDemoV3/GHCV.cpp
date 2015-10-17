@@ -1,9 +1,9 @@
 // OpenCVTest.cpp : Defines the entry point for the console application.
-//TEAM 5
+//
 
-#include "opencv/cv.h"
-#include "opencv/cxcore.h"
-#include "opencv/highgui.h"
+#include <opencv/cv.h>
+#include <opencv/cxcore.h>
+#include <opencv/highgui.h>
 #include <stdio.h>
 #include <iostream>
 #include <vector>
@@ -13,13 +13,11 @@
 #include <sstream>
 #include <fstream>
 #include <algorithm>
-#include <unistd.h>
 #include "StatMerge.h"
-//#include "SegmentMatch.h"k
+//#include "SegmentMatch.h"
 #include "FloatImage.h"
 #include "IntImage.h"
 #include "LinearShapeMatch.h"
-#include <fstream>
 
 const double TIME_CALC_FRAMES = 1;
 
@@ -206,11 +204,7 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
 {
 	std::cout << "loading " << actionName << " " << id << std::endl;
 
-
-	std::string totalPrefix = "/Users/priyankakulkarni/Documents/Project/MPC/ActionRecDemoV3/data/" + actionName;
-
-	//std::string totalPrefix = "/Users/admin/data/" + actionName;
-
+	std::string totalPrefix = "data/" + actionName;
 
 	ActionInstance* ret = new ActionInstance;
 	ret->tData = new std::vector<FloatImage*>;
@@ -222,9 +216,8 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
 	for(int i = 0; i < count; ++i)
 	{
 		int curNum = 10000 + (100 * id) + i;
-    	std::string fname = totalPrefix + "_" + IntToString(curNum) + ".PNG";
-        //std::string fname = "/Users/admin/data/up_10100.PNG";
-        std::cout << "Filename: " << fname << std::endl;
+		std::string fname = totalPrefix + "_" + IntToString(curNum) + ".PNG";
+		std::cout << "Filename: " << fname << std::endl;
 		IntImage* tempII = new IntImage(cvLoadImage(fname.c_str()));
 		int* c0 = tempII->getChannel(0);
 		FloatImage* tempF = new FloatImage(tempII->width(), tempII->height());
@@ -235,7 +228,6 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
 				tempF->data[p] = -1.0f;
 				ret->tmass += 1.0f;
 			}
-            
 			else
 				tempF->data[p] = 1.0f;
 		}
@@ -353,7 +345,7 @@ IntImage* renderTemplateFrame(std::vector<FloatImage*>* tData, int f)
 	return ret;
 }
 
-int processVideo(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
 	int cameraid; // = 1;
 	int writeFCount = 0;
@@ -409,7 +401,7 @@ int processVideo(int argc, char* argv[])
 	for(int i = 0; i < numActions; ++i)
 		timeoutArray[i] = 0;
 	int timeoutPeriodArray[4] = {12, 5, 5, 5};
-    
+
 	std::vector<ActionInstance*> actionInstances;
 
 	// load the template library
@@ -423,22 +415,21 @@ int processVideo(int argc, char* argv[])
 		}
 	}
 	std::cout << "Done loading action library; loaded " << actionInstances.size() << " instances.\n";
-    
-	
+
+	cvWaitKey(1000);
+
 	IntImage* timg = renderTemplateFrame(actionInstances[0]->tData, 2);
 	cvNamedWindow( "Template", CV_WINDOW_AUTOSIZE );
 	IplImage* timgipl = timg->getIplImage();
 	cvShowImage("Template", timgipl);
 
-	cvWaitKey(10000);
+	cvWaitKey();
 
 	LinearShapeMatch* lsm = new LinearShapeMatch(process_width, process_height, actionFrames);
 	lsm->setFill(1.0f, true);
 
 	// get access to webcam
-	//CvCapture* srcVideoCapture = cvCaptureFromCAM( cameraid );
-    
-    CvCapture* srcVideoCapture = cvCaptureFromFile("output.avi");
+	CvCapture* srcVideoCapture = cvCaptureFromCAM( cameraid );
 
 	float scale_x = display_width / process_width;
 	float scale_y = display_height / process_height;
@@ -479,7 +470,7 @@ int processVideo(int argc, char* argv[])
 	cvNamedWindow( "Template Locations", CV_WINDOW_AUTOSIZE );
 
 	std::cout << "About to enter main loop.\n";
-    
+
    	// prepare some timing stuff
 	std::list<clock_t> clocktimes(TIME_CALC_FRAMES);
 	clock_t curTime, frontTime;
@@ -503,16 +494,7 @@ int processVideo(int argc, char* argv[])
 	clock_t prevTime = clock();
 	curTime = clock();
 
-    
-
-   
-    
-    std::ofstream outfile;
-    outfile.open("/Users/priyankakulkarni/Documents/test.txt", std::ios_base::app);
-   
-    
-
-    // enter main loop-- this runs the display as fast as possible
+	// enter main loop-- this runs the display as fast as possible
 	while(1)
 	{
 		// deal with timing stuff
@@ -528,13 +510,8 @@ int processVideo(int argc, char* argv[])
 		std::cout << "avg_delay: " << avg_delay << std::endl;
 		std::cout << "fps: " << fps << std::endl;
 
-
-        
-        
 		// grab a frame
 		rawFrame = cvQueryFrame(srcVideoCapture);
-       
-        
 		cvResize(rawFrame, resizedSrcFrame);
 		cvResize(rawFrame, resizedPFrame);
 
@@ -544,9 +521,8 @@ int processVideo(int argc, char* argv[])
 		src_r_img->copy(resizedPFrame, true);
 		dest_img->copy(resizedPFrame, true);
 		src_img->copy(resizedSrcFrame, true);
-        cvShowImage("Source Video", resizedSrcFrame);
-       
-        // segment it
+
+		// segment it
 		tempSeg = statMerge->doSegmentation(src_r_img->getChannel(0), src_r_img->getChannel(1), src_r_img->getChannel(2), seg_prob);
 		tempSegSizes = statMerge->getSizeArray();
 		src_segmentation->copyChannel(tempSeg, 0);
@@ -649,10 +625,6 @@ int processVideo(int argc, char* argv[])
 		std::cout << "Best action: " << bestAction << std::endl;
 		std::cout << "Send action: " << sendActionName << std::endl;
 		std::cout << "Best distance: " << bestDist2 << std::endl;
-        outfile << sendActionName << "\n";
-        
-       
-        
 		if(sendActionID >= 0)
 		{
 			int keyToSend = actionTypes[sendActionID].sendKey;
@@ -660,7 +632,6 @@ int processVideo(int argc, char* argv[])
 			{
 				std::string sendString = IntToString(keyToSend) + "\n";
 				write(3, sendString.c_str(), sendString.size());
-    
 			}
 		}
 
@@ -696,14 +667,10 @@ int processVideo(int argc, char* argv[])
 		std::cout << "key : " << (keyPressed & 255) << std::endl;
 		if( (keyPressed & 255) == 27 ) // esc key
 		{
-            std::cout << "Closing " << std::endl;
-            
-            outfile.close();
-
 			// quit
 			break;
 		}
 	}
-    
+
 	return 0;
 }
