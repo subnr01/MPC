@@ -42,40 +42,56 @@ int       	server_port;
 pthread_mutex_t gmutex = PTHREAD_MUTEX_INITIALIZER;
 
 
-void* streamClient(void* arg);
+void* sendData(void* arg);
+void* receiveData(void*);
+int establishTCPConnection();
+int establishUDPConnection();
 void  quit(string msg, int retval);
 
 int startTCPClient(char *servername, int port)
 {
-    pthread_t   thread_c;
+    pthread_t   sendthread;
+    pthread_t recthread;
     int         key;
+    Size size(640,480);
     
     server_ip = servername;
     server_port = port;
+    
+    
+    int clientSock = establishTCPConnection();
+
     capture.open(0);
     
     if (!capture.isOpened()) {
         quit("\n--> cvCapture failed", 1);
     }
     
+    
+    
+    // run the sending thread
+    if (pthread_create(&sendthread, NULL, sendData, &clientSock)) {
+        quit("\n--> pthread_create failed.", 1);
+    }
 
     
-    capture >> img0;
-    img1 = Mat::zeros(img0.rows, img0.cols ,CV_8UC1);
-    
-    // run the streaming client as a separate thread
-    if (pthread_create(&thread_c, NULL, streamClient, NULL)) {
+    // run the receiving thread
+    if (pthread_create(&recthread, NULL, receiveData, &clientSock)) {
         quit("\n--> pthread_create failed.", 1);
     }
     
+    //capture >> img0;
+    
+
     cout << "\n--> Press 'q' to quit. \n\n" << endl;
     
     /* print the width and height of the frame, needed by the client */
-    cout << "\n--> Transferring  (" << img0.cols << "x" << img0.rows << ")  images to the:  " << server_ip << ":" << server_port << endl;
+    
     
     namedWindow("stream_client", CV_WINDOW_AUTOSIZE);
-    flip(img0, img0, 1);
-    cvtColor(img0, img1, CV_BGR2GRAY);
+    //flip(img0, img0, 1);
+    
+    //cvtColor(img0, img1, CV_BGR2GRAY);
     
     while(key != 'q') {
         /* get a frame from camera */
@@ -83,8 +99,9 @@ int startTCPClient(char *servername, int port)
         if (img0.empty()) break;
         
         pthread_mutex_lock(&gmutex);
-        
+        resize(img0,img0,size);
         flip(img0, img0, 1);
+        img1 = Mat::zeros(img0.rows, img0.cols ,CV_8UC1);
         cvtColor(img0, img1, CV_BGR2GRAY);
         
         is_data_ready = 1;
@@ -94,11 +111,11 @@ int startTCPClient(char *servername, int port)
         /*also display the video here on client */
         
         imshow("stream_client", img0);
-        key = waitKey(30);
+        key = waitKey(3);
     }
     
     /* user has pressed 'q', terminate the streaming client */
-    if (pthread_cancel(thread_c)) {
+    if (pthread_cancel(sendthread) || pthread_cancel(recthread) ) {
         quit("\n--> pthread_cancel failed.", 1);
     }
     
@@ -108,19 +125,14 @@ int startTCPClient(char *servername, int port)
     return 0;
 }
 
-
-/**
- * This is the streaming client, run as separate thread
- */
-void* streamClient(void* arg)
+int establishTCPConnection()
 {
+    
     struct  sockaddr_in serverAddr;
-    socklen_t           serverAddrLen = sizeof(serverAddr);
+    socklen_t serverAddrLen = sizeof(serverAddr);
+    int clientSock;
     
-    /* make this thread cancellable using pthread_cancel() */
-    pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
-    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
-    
+   
     if ((clientSock = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
         quit("\n--> socket() failed.", 1);
     }
@@ -133,43 +145,70 @@ void* streamClient(void* arg)
         perror("connect failed");
         quit("\n--> connect() failed.", 1);
     }
+    return clientSock;
+}
+
+/*
+int establishUDPConnection() {
     
-    int  imgSize = img1.total()*img1.elemSize();
+}
+ */
+
+/**
+ * This is the streaming client, run as separate thread
+ */
+void* sendData(void* arg)
+{
+    /* make this thread cancellable using pthread_cancel() */
+    pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
+    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+    
+    int *clientSock = (int*)arg;
+    
     int  bytes=0;
-    img2 = (img1.reshape(0,1)); // to make it continuous
+   // img2 = (img1.reshape(0,1)); // to make it continuous
     
     /* start sending images */
     while(1)
     {
         /* send the grayscaled frame, thread safe */
+        
         if (is_data_ready) {
             pthread_mutex_lock(&gmutex);
-            if ((bytes = send(clientSock, img2.data, imgSize, 0)) < 0){
+            int  imgSize = img1.total()*img1.elemSize();
+            //img2 = (img1.reshape(0,1));
+            cout << "\n--> Transferring  (" << img0.cols << "x" << img0.rows << ")  images to the:  " << server_ip << ":" << server_port << endl;
+            if ((bytes = send(*clientSock, img1.data, imgSize, 0)) < 0){
+                perror("send failed");
                 cerr << "\n--> bytes = " << bytes << endl;
                 quit("\n--> send() failed", 1);
             }
             is_data_ready = 0;
             pthread_mutex_unlock(&gmutex);
-            memset(&serverAddr, 0x0, serverAddrLen);
+            //memset(&serverAddr, 0x0, serverAddrLen);
         }
-        /* if something went wrong, restart the connection */
-        if (bytes != imgSize) {
-            cerr << "\n-->  Connection closed (bytes != imgSize)" << endl;
-            close(clientSock);
-            
-            if (connect(clientSock, (sockaddr*) &serverAddr, serverAddrLen) == -1) {
-                quit("\n--> connect() failed", 1);
-            }
-        }
-        
         /* have we terminated yet? */
         pthread_testcancel();
         
         /* no, take a rest for a while */
-        usleep(1000);   //1000 Micro Sec
+        usleep(10);   //1000 Micro Sec
     }
+    return 0;
 }
 
+
+
+void* receiveData(void* arg)
+{
+    /* make this thread cancellable using pthread_cancel() */
+    pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
+    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+    
+    /* have we terminated yet? */
+    pthread_testcancel();
+    return 0;
+    
+}
 
 /**
  * this function provides a way to exit nicely from the system
@@ -199,9 +238,5 @@ void quit(string msg, int retval)
     pthread_mutex_destroy(&gmutex);
     exit(retval);
 }
-
-
-
-
 
 

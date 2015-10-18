@@ -10,8 +10,10 @@
 #define tcpserver_hpp
 
 #include <stdio.h>
+#include "blocking_queue.h"
 
 #define PORT 1234
+
 
 int tcpServer(int port);
 void *servlet(void *arg);

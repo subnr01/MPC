@@ -9,6 +9,8 @@
 #include <iostream>
 
 int main(int argc, const char * argv[]) {
+    //startTCPClient("128.2.213.222",PORT);
     startTCPClient("127.0.0.1",PORT);
+    
     return 0;
 }

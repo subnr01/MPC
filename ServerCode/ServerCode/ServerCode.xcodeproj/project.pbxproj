@@ -213,6 +213,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		844792E51BD3021A00702A97 /* blocking_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blocking_queue.h; sourceTree = "<group>"; };
+		844792E61BD308FD00702A97 /* tcp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tcp.h; sourceTree = "<group>"; };
 		847295271BD14437003AB766 /* ServerCode */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ServerCode; sourceTree = BUILT_PRODUCTS_DIR; };
 		8472952A1BD14437003AB766 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		847295441BD14643003AB766 /* tcpserver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tcpserver.cpp; sourceTree = "<group>"; };
@@ -829,6 +831,8 @@
 				8472952A1BD14437003AB766 /* main.cpp */,
 				847295441BD14643003AB766 /* tcpserver.cpp */,
 				847295451BD14643003AB766 /* tcpserver.hpp */,
+				844792E51BD3021A00702A97 /* blocking_queue.h */,
+				844792E61BD308FD00702A97 /* tcp.h */,
 			);
 			path = ServerCode;
 			sourceTree = "<group>";
