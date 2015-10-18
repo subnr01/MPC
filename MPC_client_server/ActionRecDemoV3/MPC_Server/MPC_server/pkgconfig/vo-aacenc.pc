@@ -1,0 +1,1 @@
+../../Cellar/libvo-aacenc/0.1.3/lib/pkgconfig/vo-aacenc.pc

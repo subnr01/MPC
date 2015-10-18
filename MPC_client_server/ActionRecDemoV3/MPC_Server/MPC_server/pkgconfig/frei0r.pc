@@ -1,0 +1,1 @@
+../../Cellar/frei0r/1.4/lib/pkgconfig/frei0r.pc
