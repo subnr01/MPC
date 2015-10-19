@@ -80,8 +80,8 @@ int startTCPClient(char *servername, int port)
         quit("\n--> pthread_create failed.", 1);
     }
     
-    //capture >> img0;
-    
+    capture >> img0;
+    img1 = Mat::zeros(img0.rows, img0.cols ,CV_8UC1);
 
     cout << "\n--> Press 'q' to quit. \n\n" << endl;
     
@@ -101,9 +101,9 @@ int startTCPClient(char *servername, int port)
         pthread_mutex_lock(&gmutex);
         resize(img0,img0,size);
         flip(img0, img0, 1);
-        img1 = Mat::zeros(img0.rows, img0.cols ,CV_8UC3);
-        //cvtColor(img0, img1, CV_RGB2GRAY);
-        img1 = img0.clone();
+        
+        cvtColor(img0, img1, CV_BGR2GRAY);
+        //img1 = img0.clone();
         is_data_ready = 1;
         
         pthread_mutex_unlock(&gmutex);
@@ -111,7 +111,7 @@ int startTCPClient(char *servername, int port)
         /*also display the video here on client */
         
         imshow("stream_client", img0);
-        key = waitKey(3);
+        key = waitKey(30);
     }
     
     /* user has pressed 'q', terminate the streaming client */
@@ -175,7 +175,7 @@ void* sendData(void* arg)
         
         if (is_data_ready) {
             pthread_mutex_lock(&gmutex);
-            int  imgSize = img0.total()*img0.elemSize();
+            int  imgSize = img1.total()*img1.elemSize();
             //img2 = (img1.reshape(0,1));
             cout << "\n--> Transferring  (" << img1.cols << "x" << img1.rows << ")  images to the:  " << server_ip << ":" << server_port << endl;
             if ((bytes = send(*clientSock, img1.data, imgSize, 0)) < 0){
@@ -185,13 +185,13 @@ void* sendData(void* arg)
             }
             is_data_ready = 0;
             pthread_mutex_unlock(&gmutex);
-            //memset(&serverAddr, 0x0, serverAddrLen);
+            
         }
         /* have we terminated yet? */
         pthread_testcancel();
         
         /* no, take a rest for a while */
-        usleep(10);   //1000 Micro Sec
+        usleep(1000);   //1000 Micro Sec
     }
     return 0;
 }

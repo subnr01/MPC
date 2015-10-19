@@ -9,7 +9,7 @@ using namespace cv;
 
 #include <unistd.h>
 
-//int     is_data_ready = 0;
+int     is_data_ready = 0;
 
 void  quit(string msg, int retval, int sockfd);
 
@@ -19,7 +19,9 @@ printf("Failed with %d at %s", val, string); \
 exit(1);                                     \
 }                                              \
 }
+//Mat img;
 
+pthread_mutex_t gmutex = PTHREAD_MUTEX_INITIALIZER;
 
 
 int tcpServer(int port)
@@ -59,13 +61,15 @@ void processTCPConnection(int sockfd) {
     int key;
     
     while(key != 'q') {
-        key = waitKey(10);
+        
         int err = getpeername(sockfd, (struct sockaddr *) &clientAddr, &clientAddrLen);
         if ( !err) {
             cout<<"\n client has disconnected \n";
             break;
         }
-        //usleep(100);
+         
+        
+        key = waitKey(10);
        
     }
     ret = pthread_cancel(thread_master);
@@ -108,7 +112,7 @@ void cleanupHandler(void *parm) {
     int ret = 0;
     void *status = NULL;
     pthread_t *threads = (pthread_t *)parm;
-    //destroyWindow("stream_server");
+    destroyWindow("stream_server");
     printf("Inside cancellation cleanup handler\n");
     for (int i = 0; i < MAX; i++) {
         ret = pthread_cancel(threads[i]);
@@ -132,7 +136,7 @@ void* masterThread(void* arg)
     width = 640;
     height = 480;
     cv::Mat img;
-    img = cv::Mat::zeros( height, width, CV_8UC3);
+    img = cv::Mat::zeros( height, width, CV_8UC1);
     int  imgSize = img.total() * img.elemSize();
     
     int  bytes=0;
@@ -170,7 +174,7 @@ void* masterThread(void* arg)
                 (img.row(i)).col(j) = (uchar)sockData[((img.cols)*i)+j];
             }
         }
-        pthread_testcancel();
+        
         client_info.block_queue.push(img);
         client_info.connectfd = *connectSock;
         
@@ -186,15 +190,20 @@ void* masterThread(void* arg)
             }
             threads_created = true;
         }
+        
+        
+        is_data_ready = 1;
         imshow("stream_server", img);
         waitKey(30);
         memset(sockData, 0x0, sizeof(sockData));
+    
     }
+    pthread_testcancel();
     
     pthread_cleanup_pop(0);
     
     /* no, take a rest for a while */
-    usleep(1000);
+    //usleep(1000);
     //img.release();
     
 }
