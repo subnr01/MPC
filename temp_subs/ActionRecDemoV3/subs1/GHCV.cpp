@@ -674,7 +674,7 @@ int processVideo(client_info_t *client_info)
 		std::cout << "Best distance: " << bestDist2 << std::endl;
         
         //send the action information back to the client-Subbu
-        send(sockfd, bestAction.c_str(), bestAction.size(), NULL);
+        //send(sockfd, bestAction.c_str(), bestAction.size(), NULL);
         
 		if(sendActionID >= 0)
 		{

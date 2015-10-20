@@ -11,7 +11,7 @@
 
 using namespace cv;
 
-int main(int argc, const char * argv[]) {
+int main3(int argc, const char * argv[]) {
    
     // insert code here...
     tcpServer(PORT);
