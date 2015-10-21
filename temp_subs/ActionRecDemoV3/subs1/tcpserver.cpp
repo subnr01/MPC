@@ -175,7 +175,7 @@ void* masterThread(void* arg)
             }
         }
         
-        client_info.block_queue.push(img);
+        //client_info.block_queue.push(img);
         client_info.connectfd = *connectSock;
         
          

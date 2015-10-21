@@ -75,7 +75,7 @@ int main(int argc, const char * argv[])
             image = imdecode( Mat(ibuff), CV_LOAD_IMAGE_COLOR);
             //cv::imshow(windowName, image);
             //client_info.block_queue.push(image);
-	    client_info.mydeque.push_front(image);
+            client_info.mydeque.push_front(image);
             client_info.connectfd = sock;
             //processVideo(&client_info) ;
             if (!threads_created) {
@@ -97,7 +97,7 @@ int main(int argc, const char * argv[])
         }
         
         //c = cvWaitKey (1);
-        if (c == '\x1b')
+        if (c == 'q')
             break;
     }
     

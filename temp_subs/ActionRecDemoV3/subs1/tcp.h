@@ -31,7 +31,7 @@ using namespace cv;
 
 typedef struct client_info {
     int connectfd;
-    myqueue<Mat> block_queue;
+    std::deque<Mat> mydeque;
     int actionType;
 }client_info_t;
 

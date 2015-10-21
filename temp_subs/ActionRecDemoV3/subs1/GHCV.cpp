@@ -19,7 +19,8 @@
 #include "IntImage.h"
 #include "LinearShapeMatch.h"
 #include "tcp.h"
-
+#include <unistd.h>
+using namespace std;
 
 const double TIME_CALC_FRAMES = 1;
 
@@ -208,6 +209,7 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
 
 	//std::string totalPrefix = "data/" + actionName;
     std::string totalPrefix = "/Users/admin/data/" + actionName;
+    //std::string totalPrefix = "/home/ubuntu/project/MPC/temp_subs/ActionRecDemoV3/data/" + actionName;
 
 	ActionInstance* ret = new ActionInstance;
 	ret->tData = new std::vector<FloatImage*>;
@@ -416,7 +418,6 @@ int processVideo(client_info_t *client_info)
 	std::vector<ActionInstance*> actionInstances;
 
     
-    /*
     
 	// load the template library
 	std::cout << "Loading action library...\n";
@@ -428,9 +429,9 @@ int processVideo(client_info_t *client_info)
 			actionInstances.push_back(curInstance);
 		}
 	}
-    */
+/*
     // load the template library by threads-Subbu
-    int at = client_info->actionType;
+    //int at = client_info->actionType;
     std::cout<<"\n Action type is "<<at<<std::endl;
     for(int i = 0; i < actionTypes[at].count; ++i)
     {
@@ -438,6 +439,7 @@ int processVideo(client_info_t *client_info)
         actionInstances.push_back(curInstance);
     }
     
+    */
     std::cout << "Loading action library...\n";
     for(int at = 0; at < numActions; ++at)
     {
@@ -453,7 +455,7 @@ int processVideo(client_info_t *client_info)
     
 	std::cout << "Done loading action library; loaded " << actionInstances.size() << " instances.\n";
 
-	cvWaitKey(1000);
+	//cvWaitKey(1000);
 
 	IntImage* timg = renderTemplateFrame(actionInstances[0]->tData, 2);
 	cvNamedWindow( "Template", CV_WINDOW_AUTOSIZE );
@@ -515,7 +517,7 @@ int processVideo(client_info_t *client_info)
 	int last_delay = 0;
 
 	float desired_delay = 1.0f / 12.0f;
-
+	cout<<endl<<"preparing timing stuff";
 	/*
 	clock_t cst = clock();
 	std::cout << "cst: " << cst << std::endl;
@@ -534,6 +536,7 @@ int processVideo(client_info_t *client_info)
 	// enter main loop-- this runs the display as fast as possible
 	while(1)
 	{
+		cout<<endl<<"Entered main loop";
 		// deal with timing stuff
 		prevTime = curTime;
 		curTime = clock();
@@ -554,7 +557,11 @@ int processVideo(client_info_t *client_info)
 		cvResize(rawFrame, resizedPFrame);
         */
         //Popping from the queue --Subbu
-        Mat mat_img = client_info->block_queue.pop();
+	cout<<endl<<"manipulaintg dequeue";
+	std::cout<<"dequeue size is " <<client_info->mydeque.size();
+        Mat mat_img = client_info->mydeque.back();
+	client_info->mydeque.pop_back();
+	cout<<endl<<"dequeue manipulation done";
         //IplImage ipl_img = mat_img.operator IplImage();
         IplImage ipl_img = mat_img;
         rawFrame = &ipl_img;
@@ -562,6 +569,7 @@ int processVideo(client_info_t *client_info)
         cvResize(rawFrame, resizedPFrame);
         //resizedSrcFrame = &ipl_img;
         //resizedPFrame = &ipl_img;
+	cout<<endl<<"showing image";
         cvShowImage("Source Video", resizedSrcFrame);
 		cvWaitKey(10);
 
@@ -582,6 +590,7 @@ int processVideo(client_info_t *client_info)
 
 		float bestDist = 1000000.0f;
 
+		cout<<endl<<"compare with instances "<<actionInstances.size();
 		// run through every instance and compare it...
 		for(int inst = 0; inst < actionInstances.size(); ++inst)
 		{
@@ -599,6 +608,7 @@ int processVideo(client_info_t *client_info)
 				bestDist = curDist;
 			curInstance->dist = curDist;
 		}
+		cout<<endl<<"comparison done";
 
 		// sort instances according to distance..
 		std::sort(actionInstances.begin(), actionInstances.end(), actionInstanceSorter);
@@ -674,7 +684,7 @@ int processVideo(client_info_t *client_info)
 		std::cout << "Best distance: " << bestDist2 << std::endl;
         
         //send the action information back to the client-Subbu
-        //send(sockfd, bestAction.c_str(), bestAction.size(), NULL);
+        send(sockfd, bestAction.c_str(), bestAction.size(), NULL);
         
 		if(sendActionID >= 0)
 		{

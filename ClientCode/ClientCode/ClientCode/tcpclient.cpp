@@ -43,7 +43,7 @@ pthread_mutex_t gmutex = PTHREAD_MUTEX_INITIALIZER;
 
 
 void* sendData(void* arg);
-void* receiveData(void*);
+void* receiveDataThread(void*);
 int establishTCPConnection();
 int establishUDPConnection();
 void  quit(string msg, int retval);
@@ -76,7 +76,7 @@ int startTCPClient(char *servername, int port)
 
     
     // run the receiving thread
-    if (pthread_create(&recthread, NULL, receiveData, &clientSock)) {
+    if (pthread_create(&recthread, NULL, receiveDataThread, &clientSock)) {
         quit("\n--> pthread_create failed.", 1);
     }
     
@@ -198,7 +198,7 @@ void* sendData(void* arg)
 
 
 
-void* receiveData(void* arg)
+void* receiveDataThread(void* arg)
 {
     /* make this thread cancellable using pthread_cancel() */
     pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);

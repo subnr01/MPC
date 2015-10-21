@@ -198,7 +198,7 @@
 		847296E21BD263D4003AB766 /* libopencv_core.3.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 847296251BD263D4003AB766 /* libopencv_core.3.0.0.dylib */; settings = {ASSET_TAGS = (); }; };
 		847296E31BD263D4003AB766 /* libopencv_flann.3.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 847296261BD263D4003AB766 /* libopencv_flann.3.0.0.dylib */; settings = {ASSET_TAGS = (); }; };
 		847296E41BD263D4003AB766 /* libopencv_flann.3.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 847296271BD263D4003AB766 /* libopencv_flann.3.0.0.dylib */; settings = {ASSET_TAGS = (); }; };
-		84E43CA81BD5C12D00F37ED8 /* client1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84E43CA71BD5C12D00F37ED8 /* client1.cpp */; settings = {ASSET_TAGS = (); }; };
+		84E43CAA1BD7C46700F37ED8 /* udpClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84E43CA91BD7C46700F37ED8 /* udpClient.cpp */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -412,7 +412,7 @@
 		847296251BD263D4003AB766 /* libopencv_core.3.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_core.3.0.0.dylib; sourceTree = "<group>"; };
 		847296261BD263D4003AB766 /* libopencv_flann.3.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_flann.3.0.0.dylib; sourceTree = "<group>"; };
 		847296271BD263D4003AB766 /* libopencv_flann.3.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_flann.3.0.0.dylib; sourceTree = "<group>"; };
-		84E43CA71BD5C12D00F37ED8 /* client1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = client1.cpp; sourceTree = "<group>"; };
+		84E43CA91BD7C46700F37ED8 /* udpClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = udpClient.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -831,7 +831,7 @@
 				8472953D1BD14466003AB766 /* main.cpp */,
 				847295471BD153D1003AB766 /* tcpclient.cpp */,
 				847295481BD153D1003AB766 /* tcpclient.hpp */,
-				84E43CA71BD5C12D00F37ED8 /* client1.cpp */,
+				84E43CA91BD7C46700F37ED8 /* udpClient.cpp */,
 			);
 			path = ClientCode;
 			sourceTree = "<group>";
@@ -894,7 +894,7 @@
 			files = (
 				847295491BD153D1003AB766 /* tcpclient.cpp in Sources */,
 				8472953E1BD14466003AB766 /* main.cpp in Sources */,
-				84E43CA81BD5C12D00F37ED8 /* client1.cpp in Sources */,
+				84E43CAA1BD7C46700F37ED8 /* udpClient.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

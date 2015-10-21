@@ -1,20 +1,24 @@
 {
-  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "BEA4E73BEC85C37CE93A60A3E2111540ED81A953",
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "bee66105-223b-0410-aead-b05076abc5e7++6377",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "bee66105-223b-0410-aead-b05076abc5e7++6377" : {
 
+    }
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "E269C7C93068BF40067A80260EE84750C7C843BF" : 0,
-    "BEA4E73BEC85C37CE93A60A3E2111540ED81A953" : 0
+    "bee66105-223b-0410-aead-b05076abc5e7++6377" : 0,
+    "BEA4E73BEC85C37CE93A60A3E2111540ED81A953" : 0,
+    "E269C7C93068BF40067A80260EE84750C7C843BF" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "A7EC355C-FD89-4D6E-BAF3-B8CBEBDF6371",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "E269C7C93068BF40067A80260EE84750C7C843BF" : "",
-    "BEA4E73BEC85C37CE93A60A3E2111540ED81A953" : "MPC\/"
+    "bee66105-223b-0410-aead-b05076abc5e7++6377" : "ActionRecDemoV3\/",
+    "BEA4E73BEC85C37CE93A60A3E2111540ED81A953" : "..",
+    "E269C7C93068BF40067A80260EE84750C7C843BF" : "..\/.."
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "subs1",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
-  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "temp_subs\/ActionRecDemoV3\/subs1\/subs1.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "subs1\/subs1.xcodeproj",
   "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/subnr01\/MPC.git",
@@ -25,6 +29,11 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/subnr01\/Projects.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E269C7C93068BF40067A80260EE84750C7C843BF"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/svn.pittsburgh.intel-research.net\/repos\/bigdata",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "bee66105-223b-0410-aead-b05076abc5e7++6377"
     }
   ]
 }
