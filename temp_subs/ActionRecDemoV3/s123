@@ -1,0 +1,65 @@
+GHCV.cpp: In function 'int processVideo(client_info_t*)':
+GHCV.cpp:677:65: warning: passing NULL to non-pointer argument 4 of 'ssize_t send(int, const void*, size_t, int)' [-Wconversion-null]
+         send(sockfd, bestAction.c_str(), bestAction.size(), NULL);
+                                                                 ^
+GHCV_latest_bk.cpp:10:10: warning: invalid suffix on literal; C++11 requires a space between literal and identifier [-Wliteral-suffix]
+ #include <list>k
+          ^
+GHCV_latest_bk.cpp:10:16: warning: extra tokens at end of #include directive [enabled by default]
+ #include <list>k
+                ^
+tcpserver.cpp:4:0: warning: "MAX" redefined [enabled by default]
+ #define MAX 4
+ ^
+In file included from /usr/local/include/opencv2/core.hpp:50:0,
+                 from /usr/local/include/opencv2/core/core.hpp:48,
+                 from tcp.h:25,
+                 from tcpserver.cpp:1:
+/usr/local/include/opencv2/core/cvdef.h:354:0: note: this is the location of the previous definition
+ #  define MAX(a,b)  ((a) < (b) ? (b) : (a))
+ ^
+/tmp/cc84krQT.o: In function `copyUtoF(_IplImage*, _IplImage*)':
+GHCV_latest_bk.cpp:(.text+0x36): multiple definition of `copyUtoF(_IplImage*, _IplImage*)'
+/tmp/cckA4uE3.o:GHCV.cpp:(.text+0xa8): first defined here
+/tmp/cc84krQT.o: In function `int32toint8(CvMat*, CvMat*)':
+GHCV_latest_bk.cpp:(.text+0x205): multiple definition of `int32toint8(CvMat*, CvMat*)'
+/tmp/cckA4uE3.o:GHCV.cpp:(.text+0x277): first defined here
+/tmp/cc84krQT.o: In function `copy3ItoU(int*, int*, int*, _IplImage*)':
+GHCV_latest_bk.cpp:(.text+0x27d): multiple definition of `copy3ItoU(int*, int*, int*, _IplImage*)'
+/tmp/cckA4uE3.o:GHCV.cpp:(.text+0x2ef): first defined here
+/tmp/cc84krQT.o: In function `copyUto3I(_IplImage*, int*, int*, int*)':
+GHCV_latest_bk.cpp:(.text+0x39c): multiple definition of `copyUto3I(_IplImage*, int*, int*, int*)'
+/tmp/cckA4uE3.o:GHCV.cpp:(.text+0x40e): first defined here
+/tmp/cc84krQT.o: In function `straightIntToInt32(int*, CvMat*, int)':
+GHCV_latest_bk.cpp:(.text+0x4cd): multiple definition of `straightIntToInt32(int*, CvMat*, int)'
+/tmp/cckA4uE3.o:GHCV.cpp:(.text+0x53f): first defined here
+/tmp/cc84krQT.o: In function `IntToString(int)':
+GHCV_latest_bk.cpp:(.text+0x52b): multiple definition of `IntToString(int)'
+/tmp/cckA4uE3.o:GHCV.cpp:(.text+0x59d): first defined here
+/tmp/cc84krQT.o: In function `writeImage(_IplImage*, std::string, int)':
+GHCV_latest_bk.cpp:(.text+0x5c8): multiple definition of `writeImage(_IplImage*, std::string, int)'
+/tmp/cckA4uE3.o:GHCV.cpp:(.text+0x63a): first defined here
+/tmp/cc84krQT.o: In function `copyTLII(ThreeLayerIntImage&, ThreeLayerIntImage&)':
+GHCV_latest_bk.cpp:(.text+0x6ae): multiple definition of `copyTLII(ThreeLayerIntImage&, ThreeLayerIntImage&)'
+/tmp/cckA4uE3.o:GHCV.cpp:(.text+0x720): first defined here
+/tmp/cc84krQT.o: In function `actionInstanceSorter(ActionInstance*, ActionInstance*)':
+GHCV_latest_bk.cpp:(.text+0x797): multiple definition of `actionInstanceSorter(ActionInstance*, ActionInstance*)'
+/tmp/cckA4uE3.o:GHCV.cpp:(.text+0x809): first defined here
+/tmp/cc84krQT.o: In function `loadTemplateByName(std::string, int, int, int)':
+GHCV_latest_bk.cpp:(.text+0x7bd): multiple definition of `loadTemplateByName(std::string, int, int, int)'
+/tmp/cckA4uE3.o:GHCV.cpp:(.text+0x82f): first defined here
+/tmp/cc84krQT.o: In function `drawRectangle(IntImage*, int, int, int, int, int, int, int)':
+GHCV_latest_bk.cpp:(.text+0xbf7): multiple definition of `drawRectangle(IntImage*, int, int, int, int, int, int, int)'
+/tmp/cckA4uE3.o:GHCV.cpp:(.text+0xc69): first defined here
+/tmp/cc84krQT.o: In function `copySubImage(int*, int*, int*, int*, int*, int*, int, int, int, int, int, int)':
+GHCV_latest_bk.cpp:(.text+0xf4f): multiple definition of `copySubImage(int*, int*, int*, int*, int*, int*, int, int, int, int, int, int)'
+/tmp/cckA4uE3.o:GHCV.cpp:(.text+0xfc1): first defined here
+/tmp/cc84krQT.o: In function `renderTemplateFrame(std::vector<FloatImage*, std::allocator<FloatImage*> >*, int)':
+GHCV_latest_bk.cpp:(.text+0x1053): multiple definition of `renderTemplateFrame(std::vector<FloatImage*, std::allocator<FloatImage*> >*, int)'
+/tmp/cckA4uE3.o:GHCV.cpp:(.text+0x10c5): first defined here
+/tmp/ccpRfWdA.o: In function `main':
+main.cpp:(.text+0x0): multiple definition of `main'
+/tmp/cc84krQT.o:GHCV_latest_bk.cpp:(.text+0x12a3): first defined here
+/usr/bin/ld: /tmp/ccq4RM1q.o: undefined reference to symbol 'pthread_cancel@@GLIBC_2.2.5'
+//lib/x86_64-linux-gnu/libpthread.so.0: error adding symbols: DSO missing from command line
+collect2: error: ld returned 1 exit status

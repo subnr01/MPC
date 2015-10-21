@@ -1,9 +1,9 @@
 // OpenCVTest.cpp : Defines the entry point for the console application.
-//TEAM 5
+//
 
-#include "opencv/cv.h"
-#include "opencv/cxcore.h"
-#include "opencv/highgui.h"
+#include <opencv/cv.h>
+#include <opencv/cxcore.h>
+#include <opencv/highgui.h>
 #include <stdio.h>
 #include <iostream>
 #include <vector>
@@ -13,13 +13,14 @@
 #include <sstream>
 #include <fstream>
 #include <algorithm>
-#include <unistd.h>
 #include "StatMerge.h"
-//#include "SegmentMatch.h"k
+//#include "SegmentMatch.h"
 #include "FloatImage.h"
 #include "IntImage.h"
 #include "LinearShapeMatch.h"
-#include <fstream>
+#include "tcp.h"
+#include <unistd.h>
+using namespace std;
 
 const double TIME_CALC_FRAMES = 1;
 
@@ -206,11 +207,9 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
 {
 	std::cout << "loading " << actionName << " " << id << std::endl;
 
-
-	//std::string totalPrefix = "/Users/priyankakulkarni/Documents/Project/MPC/ActionRecDemoV3/data/" + actionName;
-
-	std::string totalPrefix = "/Users/admin/data/" + actionName;
-
+	//std::string totalPrefix = "data/" + actionName;
+    //std::string totalPrefix = "/Users/admin/data/" + actionName;
+    std::string totalPrefix = "/home/ubuntu/project/MPC/temp_subs/ActionRecDemoV3/data/" + actionName;
 
 	ActionInstance* ret = new ActionInstance;
 	ret->tData = new std::vector<FloatImage*>;
@@ -222,9 +221,8 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
 	for(int i = 0; i < count; ++i)
 	{
 		int curNum = 10000 + (100 * id) + i;
-    	std::string fname = totalPrefix + "_" + IntToString(curNum) + ".PNG";
-        //std::string fname = "/Users/admin/data/up_10100.PNG";
-        std::cout << "Filename: " << fname << std::endl;
+		std::string fname = totalPrefix + "_" + IntToString(curNum) + ".PNG";
+		std::cout << "Filename: " << fname << std::endl;
 		IntImage* tempII = new IntImage(cvLoadImage(fname.c_str()));
 		int* c0 = tempII->getChannel(0);
 		FloatImage* tempF = new FloatImage(tempII->width(), tempII->height());
@@ -235,7 +233,6 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
 				tempF->data[p] = -1.0f;
 				ret->tmass += 1.0f;
 			}
-            
 			else
 				tempF->data[p] = 1.0f;
 		}
@@ -353,14 +350,21 @@ IntImage* renderTemplateFrame(std::vector<FloatImage*>* tData, int f)
 	return ret;
 }
 
-int main(int argc, char* argv[])
-//int processVideo()
+//int main(int argc, char* argv[])
+int processVideo(client_info_t *client_info)
 {
-	int cameraid; // = 1;
+    
+    //Assign the socket descriptor--Subbu
+    int sockfd = client_info->connectfd;
+    int cameraid; // = 1;
 	int writeFCount = 0;
-	if (argc==2) cameraid=1;
-	else cameraid =0;
-
+	//if (argc==2) cameraid=1;
+	//else cameraid =0;
+    cameraid = 0;
+    if (!cameraid) {
+        std::cout<<" thread processing in progress";
+        //return 0;
+    }
 	// define processing and display resolutions
 	int process_width = 180;
 	int process_height = 144;
@@ -410,9 +414,11 @@ int main(int argc, char* argv[])
 	for(int i = 0; i < numActions; ++i)
 		timeoutArray[i] = 0;
 	int timeoutPeriodArray[4] = {12, 5, 5, 5};
-    
+
 	std::vector<ActionInstance*> actionInstances;
 
+    
+    
 	// load the template library
 	std::cout << "Loading action library...\n";
 	for(int at = 0; at < numActions; ++at)
@@ -423,23 +429,46 @@ int main(int argc, char* argv[])
 			actionInstances.push_back(curInstance);
 		}
 	}
+/*
+    // load the template library by threads-Subbu
+    //int at = client_info->actionType;
+    std::cout<<"\n Action type is "<<at<<std::endl;
+    for(int i = 0; i < actionTypes[at].count; ++i)
+    {
+        ActionInstance* curInstance = loadTemplateByName(actionTypes[at].actionName, at, i+1, actionFrames);
+        actionInstances.push_back(curInstance);
+    }
+    
+    */
+    std::cout << "Loading action library...\n";
+    for(int at = 0; at < numActions; ++at)
+    {
+        for(int i = 0; i < actionTypes[at].count; ++i)
+        {
+            ActionInstance* curInstance = loadTemplateByName(actionTypes[at].actionName, at, i+1, actionFrames);
+            actionInstances.push_back(curInstance);
+        }
+    }
+    
+    
+    
+    
 	std::cout << "Done loading action library; loaded " << actionInstances.size() << " instances.\n";
-    cvWaitKey(1000);
-	
+
+	//cvWaitKey(1000);
+
 	IntImage* timg = renderTemplateFrame(actionInstances[0]->tData, 2);
 	cvNamedWindow( "Template", CV_WINDOW_AUTOSIZE );
 	IplImage* timgipl = timg->getIplImage();
 	cvShowImage("Template", timgipl);
 
-	cvWaitKey();
+	cvWaitKey(10);
 
 	LinearShapeMatch* lsm = new LinearShapeMatch(process_width, process_height, actionFrames);
 	lsm->setFill(1.0f, true);
 
 	// get access to webcam
 	CvCapture* srcVideoCapture = cvCaptureFromCAM( cameraid );
-    
-    //CvCapture* srcVideoCapture = cvCaptureFromFile("output.avi");
 
 	float scale_x = display_width / process_width;
 	float scale_y = display_height / process_height;
@@ -480,7 +509,7 @@ int main(int argc, char* argv[])
 	cvNamedWindow( "Template Locations", CV_WINDOW_AUTOSIZE );
 
 	std::cout << "About to enter main loop.\n";
-    
+
    	// prepare some timing stuff
 	std::list<clock_t> clocktimes(TIME_CALC_FRAMES);
 	clock_t curTime, frontTime;
@@ -488,7 +517,7 @@ int main(int argc, char* argv[])
 	int last_delay = 0;
 
 	float desired_delay = 1.0f / 12.0f;
-
+	cout<<endl<<"preparing timing stuff";
 	/*
 	clock_t cst = clock();
 	std::cout << "cst: " << cst << std::endl;
@@ -504,18 +533,10 @@ int main(int argc, char* argv[])
 	clock_t prevTime = clock();
 	curTime = clock();
 
-    
-
-   
-    
-    //std::ofstream outfile;
-    //outfile.open("/Users/priyankakulkarni/Documents/test.txt", std::ios_base::app);
-   
-    
-
-    // enter main loop-- this runs the display as fast as possible
+	// enter main loop-- this runs the display as fast as possible
 	while(1)
 	{
+		cout<<endl<<"Entered main loop";
 		// deal with timing stuff
 		prevTime = curTime;
 		curTime = clock();
@@ -528,26 +549,35 @@ int main(int argc, char* argv[])
 		fps = 1.0f / avg_delay;
 		std::cout << "avg_delay: " << avg_delay << std::endl;
 		std::cout << "fps: " << fps << std::endl;
-
-
         
-        
+        /*
 		// grab a frame
 		rawFrame = cvQueryFrame(srcVideoCapture);
-       
-        
 		cvResize(rawFrame, resizedSrcFrame);
 		cvResize(rawFrame, resizedPFrame);
-
-		cvShowImage("Source Video", resizedSrcFrame);
+        */
+        //Popping from the queue --Subbu
+	cout<<endl<<"manipulaintg dequeue";
+	std::cout<<"dequeue size is " <<client_info->mydeque.size();
+        Mat mat_img = client_info->mydeque.back();
+	client_info->mydeque.pop_back();
+	cout<<endl<<"dequeue manipulation done";
+        //IplImage ipl_img = mat_img.operator IplImage();
+        IplImage ipl_img = mat_img;
+        rawFrame = &ipl_img;
+        cvResize(rawFrame, resizedSrcFrame);
+        cvResize(rawFrame, resizedPFrame);
+        //resizedSrcFrame = &ipl_img;
+        //resizedPFrame = &ipl_img;
+	cout<<endl<<"showing image";
+        cvShowImage("Source Video", resizedSrcFrame);
 		cvWaitKey(10);
 
 		src_r_img->copy(resizedPFrame, true);
 		dest_img->copy(resizedPFrame, true);
 		src_img->copy(resizedSrcFrame, true);
-        cvShowImage("Source Video", resizedSrcFrame);
-       
-        // segment it
+
+		// segment it
 		tempSeg = statMerge->doSegmentation(src_r_img->getChannel(0), src_r_img->getChannel(1), src_r_img->getChannel(2), seg_prob);
 		tempSegSizes = statMerge->getSizeArray();
 		src_segmentation->copyChannel(tempSeg, 0);
@@ -560,6 +590,7 @@ int main(int argc, char* argv[])
 
 		float bestDist = 1000000.0f;
 
+		cout<<endl<<"compare with instances "<<actionInstances.size();
 		// run through every instance and compare it...
 		for(int inst = 0; inst < actionInstances.size(); ++inst)
 		{
@@ -577,6 +608,7 @@ int main(int argc, char* argv[])
 				bestDist = curDist;
 			curInstance->dist = curDist;
 		}
+		cout<<endl<<"comparison done";
 
 		// sort instances according to distance..
 		std::sort(actionInstances.begin(), actionInstances.end(), actionInstanceSorter);
@@ -635,17 +667,24 @@ int main(int argc, char* argv[])
 		{
 			sendActionID = bestActionID;
 			sendActionName = actionTypes[sendActionID].actionName;
+			//timeoutArray[bestActionID] = timeoutPeriod;
 			timeoutArray[bestActionID] = timeoutPeriodArray[bestActionID];
 		}
 
 		for(int i = 0; i < numActions; ++i)
 			timeoutArray[i] -= 1;
 
-        std::cout << "Best action: " << bestAction << std::endl;
+		// get the best one...
+		//ActionInstance* best = actionInstances[0];
+		//std::string bestAction = actionTypes[best->actionType].actionName;
+		//std::cout << "Best action: " << bestAction << " " << best->id << " with a distance of " << best->dist << std::endl;
+		//std::cout << "Real best dist: " << bestDist << std::endl;
+		std::cout << "Best action: " << bestAction << std::endl;
 		std::cout << "Send action: " << sendActionName << std::endl;
 		std::cout << "Best distance: " << bestDist2 << std::endl;
         
-       
+        //send the action information back to the client-Subbu
+        send(sockfd, bestAction.c_str(), bestAction.size(), NULL);
         
 		if(sendActionID >= 0)
 		{
@@ -654,7 +693,6 @@ int main(int argc, char* argv[])
 			{
 				std::string sendString = IntToString(keyToSend) + "\n";
 				write(3, sendString.c_str(), sendString.size());
-    
 			}
 		}
 
@@ -690,14 +728,10 @@ int main(int argc, char* argv[])
 		std::cout << "key : " << (keyPressed & 255) << std::endl;
 		if( (keyPressed & 255) == 27 ) // esc key
 		{
-            std::cout << "Closing " << std::endl;
-            
-            //outfile.close();
-
 			// quit
 			break;
 		}
 	}
-    
+
 	return 0;
 }
