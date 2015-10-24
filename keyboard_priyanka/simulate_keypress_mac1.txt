@@ -1,0 +1,17 @@
+echo "set i to 0
+repeat while i < 10
+set i to i + 1
+delay 1
+beep 1
+if (keys pressed) contains "Escape" then exit repeat
+else if (keys pressed) contains "a" then
+tell application \"System Events\" to key code 123 using option down
+else if (keys pressed) contains "d" then
+tell application \"System Events\" to key code 124 using option down
+else if (keys pressed) contains "w" then
+tell application \"System Events\" to key code 126 using option down
+else if (keys pressed) contains "s" then
+tell application \"System Events\" to key code 125 using option down
+end if
+delay (random number from 0.5 to 5)
+end repeat" | osascript
