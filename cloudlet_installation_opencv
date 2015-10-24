@@ -1,0 +1,87 @@
+sudo apt-get update
+sudo apt-get install git
+sudo apt-get install cmake
+
+sudo vi  /etc/apt/sources.list
+
+Add below to the file:
+deb http://us.archive.ubuntu.com/ubuntu/ precise multiverse 
+deb-src http://us.archive.ubuntu.com/ubuntu/ precise multiverse 
+deb http://us.archive.ubuntu.com/ubuntu/ precise-updates multiverse 
+deb-src http://us.archive.ubuntu.com/ubuntu/ precise-updates multiverse
+
+
+
+
+sudo apt-get update; sudo apt-get install libfaac-dev
+sudo apt-get install build-essential checkinstall git cmake libfaac-dev libjack-jackd2-dev libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev libsdl1.2-dev libtheora-dev libva-dev libvdpau-dev libvorbis-dev libx11-dev libxfixes-dev libxvidcore-dev texi2html yasm zlib1g-dev libsdl1.2-dev libvpx-dev
+
+sudo apt-get install libgtk2.0-0 libgtk2.0-dev  
+sudo apt-get install libjpeg8 libjpeg8-dev
+
+
+mkdir ~/source  
+mkdir ~/source/x264  
+mkdir ~/source/v4l  
+mkdir ~/source/opencv  
+mkdir ~/source/ffmpeg  
+
+
+
+
+cd ~/source/x264  
+wget ftp://ftp.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-20120528-2245-stable.tar.bz2  
+tar xvf x264-snapshot-20120528-2245-stable.tar.bz2  
+cd x264-snapshot-20120528-2245-stable  
+./configure --enable-shared --enable-pic
+make  
+sudo make install  
+
+
+
+
+cd ~/source/ffmpeg  
+wget http://ffmpeg.org/releases/ffmpeg-0.11.1.tar.bz2  
+tar xvf ffmpeg-0.11.1.tar.bz2  
+cd ffmpeg-0.11.1  
+./configure --enable-gpl --enable-libfaac --enable-libmp3lame --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libtheora --enable-libvorbis --enable-libx264 --enable-libxvid --enable-nonfree --enable-postproc --enable-version3 --enable-x11grab --enable-shared --enable-libvpx --enable-pic
+
+
+
+
+
+
+==========
+
+
+sudo apt-get -y install libopencv-dev build-essential cmake git libgtk2.0-dev pkg-config python-dev python-numpy libdc1394-22 libdc1394-22-dev libjpeg-dev libpng12-dev libtiff4-dev libjasper-dev libavcodec-dev libavformat-dev libswscale-dev libxine-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev libv4l-dev libtbb-dev libqt4-dev libfaac-dev libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev libtheora-dev libvorbis-dev libxvidcore-dev x264 v4l-utils unzip
+
+
+mkdir opencv
+cd opencv
+wget https://github.com/Itseez/opencv/archive/3.0.0-alpha.zip -O opencv-3.0.0-alpha.zip
+unzip opencv-3.0.0-alpha.zip
+
+
+cd opencv-3.0.0-alpha
+mkdir build
+cd build
+cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_TBB=ON -D WITH_V4L=ON -D WITH_QT=ON -D WITH_OPENGL=ON ..
+sudo make -j $(nproc)
+sudo make install
+
+
+sudo /bin/bash -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf'
+sudo ldconfig
+
+
+cd opencv/opencv-3.0.0-alpha/samples/
+sudo cmake .
+sudo make -j $(nproc)
+
+
+cd cpp/
+./cpp-example-facedetect lena.jpg // (../data/lena.jpg) OpenCV 3.0 beta
+./cpp-example-houghlines pic1.png // (../data/pic1.jpg) OpenCV 3.0 beta
+
+
