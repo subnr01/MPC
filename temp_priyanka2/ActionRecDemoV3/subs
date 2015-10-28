@@ -1,0 +1,272 @@
+GHCV.cpp: In function 'int processVideo(client_info_t*)':
+GHCV.cpp:677:65: warning: passing NULL to non-pointer argument 4 of 'ssize_t send(int, const void*, size_t, int)' [-Wconversion-null]
+         send(sockfd, bestAction.c_str(), bestAction.size(), NULL);
+                                                                 ^
+GHCV.cpp:685:53: error: no matching function for call to 'write(int, const char*, std::basic_string<char>::size_type)'
+     ::write(3, sendString.c_str(), sendString.size());
+                                                     ^
+GHCV.cpp:685:53: note: candidates are:
+In file included from /usr/local/include/opencv2/core.hpp:58:0,
+                 from /usr/local/include/opencv2/core/types_c.h:101,
+                 from /usr/local/include/opencv2/core/core_c.h:48,
+                 from /usr/local/include/opencv/cv.h:63,
+                 from GHCV.cpp:4:
+/usr/local/include/opencv2/core/persistence.hpp:388:17: note: void cv::write(cv::FileStorage&, const cv::String&, int)
+ CV_EXPORTS void write( FileStorage& fs, const String& name, int value );
+                 ^
+/usr/local/include/opencv2/core/persistence.hpp:388:17: note:   no known conversion for argument 1 from 'int' to 'cv::FileStorage&'
+/usr/local/include/opencv2/core/persistence.hpp:389:17: note: void cv::write(cv::FileStorage&, const cv::String&, float)
+ CV_EXPORTS void write( FileStorage& fs, const String& name, float value );
+                 ^
+/usr/local/include/opencv2/core/persistence.hpp:389:17: note:   no known conversion for argument 1 from 'int' to 'cv::FileStorage&'
+/usr/local/include/opencv2/core/persistence.hpp:390:17: note: void cv::write(cv::FileStorage&, const cv::String&, double)
+ CV_EXPORTS void write( FileStorage& fs, const String& name, double value );
+                 ^
+/usr/local/include/opencv2/core/persistence.hpp:390:17: note:   no known conversion for argument 1 from 'int' to 'cv::FileStorage&'
+/usr/local/include/opencv2/core/persistence.hpp:391:17: note: void cv::write(cv::FileStorage&, const cv::String&, const cv::String&)
+ CV_EXPORTS void write( FileStorage& fs, const String& name, const String& value );
+                 ^
+/usr/local/include/opencv2/core/persistence.hpp:391:17: note:   no known conversion for argument 1 from 'int' to 'cv::FileStorage&'
+/usr/local/include/opencv2/core/persistence.hpp:392:17: note: void cv::write(cv::FileStorage&, const cv::String&, const cv::Mat&)
+ CV_EXPORTS void write( FileStorage& fs, const String& name, const Mat& value );
+                 ^
+/usr/local/include/opencv2/core/persistence.hpp:392:17: note:   no known conversion for argument 1 from 'int' to 'cv::FileStorage&'
+/usr/local/include/opencv2/core/persistence.hpp:393:17: note: void cv::write(cv::FileStorage&, const cv::String&, const cv::SparseMat&)
+ CV_EXPORTS void write( FileStorage& fs, const String& name, const SparseMat& value );
+                 ^
+/usr/local/include/opencv2/core/persistence.hpp:393:17: note:   no known conversion for argument 1 from 'int' to 'cv::FileStorage&'
+/usr/local/include/opencv2/core/persistence.hpp:394:17: note: void cv::write(cv::FileStorage&, const cv::String&, const std::vector<cv::KeyPoint>&)
+ CV_EXPORTS void write( FileStorage& fs, const String& name, const std::vector<KeyPoint>& value);
+                 ^
+/usr/local/include/opencv2/core/persistence.hpp:394:17: note:   no known conversion for argument 1 from 'int' to 'cv::FileStorage&'
+/usr/local/include/opencv2/core/persistence.hpp:543:6: note: template<class _Tp> void cv::write(cv::FileStorage&, const _Tp&)
+ void write(FileStorage& fs, const _Tp& value)
+      ^
+/usr/local/include/opencv2/core/persistence.hpp:543:6: note:   template argument deduction/substitution failed:
+GHCV.cpp:685:53: note:   cannot convert '3' (type 'int') to type 'cv::FileStorage&'
+     ::write(3, sendString.c_str(), sendString.size());
+                                                     ^
+In file included from /usr/local/include/opencv2/core.hpp:58:0,
+                 from /usr/local/include/opencv2/core/types_c.h:101,
+                 from /usr/local/include/opencv2/core/core_c.h:48,
+                 from /usr/local/include/opencv/cv.h:63,
+                 from GHCV.cpp:4:
+/usr/local/include/opencv2/core/persistence.hpp:573:6: note: template<class _Tp> void cv::write(cv::FileStorage&, const cv::Point_<_Tp>&)
+ void write(FileStorage& fs, const Point_<_Tp>& pt )
+      ^
+/usr/local/include/opencv2/core/persistence.hpp:573:6: note:   template argument deduction/substitution failed:
+GHCV.cpp:685:53: note:   cannot convert '3' (type 'int') to type 'cv::FileStorage&'
+     ::write(3, sendString.c_str(), sendString.size());
+                                                     ^
+In file included from /usr/local/include/opencv2/core.hpp:58:0,
+                 from /usr/local/include/opencv2/core/types_c.h:101,
+                 from /usr/local/include/opencv2/core/core_c.h:48,
+                 from /usr/local/include/opencv/cv.h:63,
+                 from GHCV.cpp:4:
+/usr/local/include/opencv2/core/persistence.hpp:580:6: note: template<class _Tp> void cv::write(cv::FileStorage&, const cv::Point3_<_Tp>&)
+ void write(FileStorage& fs, const Point3_<_Tp>& pt )
+      ^
+/usr/local/include/opencv2/core/persistence.hpp:580:6: note:   template argument deduction/substitution failed:
+GHCV.cpp:685:53: note:   cannot convert '3' (type 'int') to type 'cv::FileStorage&'
+     ::write(3, sendString.c_str(), sendString.size());
+                                                     ^
+In file included from /usr/local/include/opencv2/core.hpp:58:0,
+                 from /usr/local/include/opencv2/core/types_c.h:101,
+                 from /usr/local/include/opencv2/core/core_c.h:48,
+                 from /usr/local/include/opencv/cv.h:63,
+                 from GHCV.cpp:4:
+/usr/local/include/opencv2/core/persistence.hpp:588:6: note: template<class _Tp> void cv::write(cv::FileStorage&, const cv::Size_<_Tp>&)
+ void write(FileStorage& fs, const Size_<_Tp>& sz )
+      ^
+/usr/local/include/opencv2/core/persistence.hpp:588:6: note:   template argument deduction/substitution failed:
+GHCV.cpp:685:53: note:   cannot convert '3' (type 'int') to type 'cv::FileStorage&'
+     ::write(3, sendString.c_str(), sendString.size());
+                                                     ^
+In file included from /usr/local/include/opencv2/core.hpp:58:0,
+                 from /usr/local/include/opencv2/core/types_c.h:101,
+                 from /usr/local/include/opencv2/core/core_c.h:48,
+                 from /usr/local/include/opencv/cv.h:63,
+                 from GHCV.cpp:4:
+/usr/local/include/opencv2/core/persistence.hpp:595:6: note: template<class _Tp> void cv::write(cv::FileStorage&, const cv::Complex<_Tp>&)
+ void write(FileStorage& fs, const Complex<_Tp>& c )
+      ^
+/usr/local/include/opencv2/core/persistence.hpp:595:6: note:   template argument deduction/substitution failed:
+GHCV.cpp:685:53: note:   cannot convert '3' (type 'int') to type 'cv::FileStorage&'
+     ::write(3, sendString.c_str(), sendString.size());
+                                                     ^
+In file included from /usr/local/include/opencv2/core.hpp:58:0,
+                 from /usr/local/include/opencv2/core/types_c.h:101,
+                 from /usr/local/include/opencv2/core/core_c.h:48,
+                 from /usr/local/include/opencv/cv.h:63,
+                 from GHCV.cpp:4:
+/usr/local/include/opencv2/core/persistence.hpp:602:6: note: template<class _Tp> void cv::write(cv::FileStorage&, const cv::Rect_<_Tp>&)
+ void write(FileStorage& fs, const Rect_<_Tp>& r )
+      ^
+/usr/local/include/opencv2/core/persistence.hpp:602:6: note:   template argument deduction/substitution failed:
+GHCV.cpp:685:53: note:   cannot convert '3' (type 'int') to type 'cv::FileStorage&'
+     ::write(3, sendString.c_str(), sendString.size());
+                                                     ^
+In file included from /usr/local/include/opencv2/core.hpp:58:0,
+                 from /usr/local/include/opencv2/core/types_c.h:101,
+                 from /usr/local/include/opencv2/core/core_c.h:48,
+                 from /usr/local/include/opencv/cv.h:63,
+                 from GHCV.cpp:4:
+/usr/local/include/opencv2/core/persistence.hpp:611:6: note: template<class _Tp, int cn> void cv::write(cv::FileStorage&, const cv::Vec<_Tp, m>&)
+ void write(FileStorage& fs, const Vec<_Tp, cn>& v )
+      ^
+/usr/local/include/opencv2/core/persistence.hpp:611:6: note:   template argument deduction/substitution failed:
+GHCV.cpp:685:53: note:   cannot convert '3' (type 'int') to type 'cv::FileStorage&'
+     ::write(3, sendString.c_str(), sendString.size());
+                                                     ^
+In file included from /usr/local/include/opencv2/core.hpp:58:0,
+                 from /usr/local/include/opencv2/core/types_c.h:101,
+                 from /usr/local/include/opencv2/core/core_c.h:48,
+                 from /usr/local/include/opencv/cv.h:63,
+                 from GHCV.cpp:4:
+/usr/local/include/opencv2/core/persistence.hpp:618:6: note: template<class _Tp> void cv::write(cv::FileStorage&, const cv::Scalar_<_Tp>&)
+ void write(FileStorage& fs, const Scalar_<_Tp>& s )
+      ^
+/usr/local/include/opencv2/core/persistence.hpp:618:6: note:   template argument deduction/substitution failed:
+GHCV.cpp:685:53: note:   cannot convert '3' (type 'int') to type 'cv::FileStorage&'
+     ::write(3, sendString.c_str(), sendString.size());
+                                                     ^
+In file included from /usr/local/include/opencv2/core.hpp:58:0,
+                 from /usr/local/include/opencv2/core/types_c.h:101,
+                 from /usr/local/include/opencv2/core/core_c.h:48,
+                 from /usr/local/include/opencv/cv.h:63,
+                 from GHCV.cpp:4:
+/usr/local/include/opencv2/core/persistence.hpp:627:6: note: void cv::write(cv::FileStorage&, const cv::Range&)
+ void write(FileStorage& fs, const Range& r )
+      ^
+/usr/local/include/opencv2/core/persistence.hpp:627:6: note:   candidate expects 2 arguments, 3 provided
+/usr/local/include/opencv2/core/persistence.hpp:634:6: note: template<class _Tp> void cv::write(cv::FileStorage&, const std::vector<_RealType>&)
+ void write( FileStorage& fs, const std::vector<_Tp>& vec )
+      ^
+/usr/local/include/opencv2/core/persistence.hpp:634:6: note:   template argument deduction/substitution failed:
+GHCV.cpp:685:53: note:   cannot convert '3' (type 'int') to type 'cv::FileStorage&'
+     ::write(3, sendString.c_str(), sendString.size());
+                                                     ^
+In file included from /usr/local/include/opencv2/core.hpp:58:0,
+                 from /usr/local/include/opencv2/core/types_c.h:101,
+                 from /usr/local/include/opencv2/core/core_c.h:48,
+                 from /usr/local/include/opencv/cv.h:63,
+                 from GHCV.cpp:4:
+/usr/local/include/opencv2/core/persistence.hpp:642:6: note: template<class _Tp> void cv::write(cv::FileStorage&, const cv::String&, const cv::Point_<_Tp>&)
+ void write(FileStorage& fs, const String& name, const Point_<_Tp>& pt )
+      ^
+/usr/local/include/opencv2/core/persistence.hpp:642:6: note:   template argument deduction/substitution failed:
+GHCV.cpp:685:53: note:   cannot convert '3' (type 'int') to type 'cv::FileStorage&'
+     ::write(3, sendString.c_str(), sendString.size());
+                                                     ^
+In file included from /usr/local/include/opencv2/core.hpp:58:0,
+                 from /usr/local/include/opencv2/core/types_c.h:101,
+                 from /usr/local/include/opencv2/core/core_c.h:48,
+                 from /usr/local/include/opencv/cv.h:63,
+                 from GHCV.cpp:4:
+/usr/local/include/opencv2/core/persistence.hpp:649:6: note: template<class _Tp> void cv::write(cv::FileStorage&, const cv::String&, const cv::Point3_<_Tp>&)
+ void write(FileStorage& fs, const String& name, const Point3_<_Tp>& pt )
+      ^
+/usr/local/include/opencv2/core/persistence.hpp:649:6: note:   template argument deduction/substitution failed:
+GHCV.cpp:685:53: note:   cannot convert '3' (type 'int') to type 'cv::FileStorage&'
+     ::write(3, sendString.c_str(), sendString.size());
+                                                     ^
+In file included from /usr/local/include/opencv2/core.hpp:58:0,
+                 from /usr/local/include/opencv2/core/types_c.h:101,
+                 from /usr/local/include/opencv2/core/core_c.h:48,
+                 from /usr/local/include/opencv/cv.h:63,
+                 from GHCV.cpp:4:
+/usr/local/include/opencv2/core/persistence.hpp:656:6: note: template<class _Tp> void cv::write(cv::FileStorage&, const cv::String&, const cv::Size_<_Tp>&)
+ void write(FileStorage& fs, const String& name, const Size_<_Tp>& sz )
+      ^
+/usr/local/include/opencv2/core/persistence.hpp:656:6: note:   template argument deduction/substitution failed:
+GHCV.cpp:685:53: note:   cannot convert '3' (type 'int') to type 'cv::FileStorage&'
+     ::write(3, sendString.c_str(), sendString.size());
+                                                     ^
+In file included from /usr/local/include/opencv2/core.hpp:58:0,
+                 from /usr/local/include/opencv2/core/types_c.h:101,
+                 from /usr/local/include/opencv2/core/core_c.h:48,
+                 from /usr/local/include/opencv/cv.h:63,
+                 from GHCV.cpp:4:
+/usr/local/include/opencv2/core/persistence.hpp:663:6: note: template<class _Tp> void cv::write(cv::FileStorage&, const cv::String&, const cv::Complex<_Tp>&)
+ void write(FileStorage& fs, const String& name, const Complex<_Tp>& c )
+      ^
+/usr/local/include/opencv2/core/persistence.hpp:663:6: note:   template argument deduction/substitution failed:
+GHCV.cpp:685:53: note:   cannot convert '3' (type 'int') to type 'cv::FileStorage&'
+     ::write(3, sendString.c_str(), sendString.size());
+                                                     ^
+In file included from /usr/local/include/opencv2/core.hpp:58:0,
+                 from /usr/local/include/opencv2/core/types_c.h:101,
+                 from /usr/local/include/opencv2/core/core_c.h:48,
+                 from /usr/local/include/opencv/cv.h:63,
+                 from GHCV.cpp:4:
+/usr/local/include/opencv2/core/persistence.hpp:670:6: note: template<class _Tp> void cv::write(cv::FileStorage&, const cv::String&, const cv::Rect_<_Tp>&)
+ void write(FileStorage& fs, const String& name, const Rect_<_Tp>& r )
+      ^
+/usr/local/include/opencv2/core/persistence.hpp:670:6: note:   template argument deduction/substitution failed:
+GHCV.cpp:685:53: note:   cannot convert '3' (type 'int') to type 'cv::FileStorage&'
+     ::write(3, sendString.c_str(), sendString.size());
+                                                     ^
+In file included from /usr/local/include/opencv2/core.hpp:58:0,
+                 from /usr/local/include/opencv2/core/types_c.h:101,
+                 from /usr/local/include/opencv2/core/core_c.h:48,
+                 from /usr/local/include/opencv/cv.h:63,
+                 from GHCV.cpp:4:
+/usr/local/include/opencv2/core/persistence.hpp:677:6: note: template<class _Tp, int cn> void cv::write(cv::FileStorage&, const cv::String&, const cv::Vec<_Tp, m>&)
+ void write(FileStorage& fs, const String& name, const Vec<_Tp, cn>& v )
+      ^
+/usr/local/include/opencv2/core/persistence.hpp:677:6: note:   template argument deduction/substitution failed:
+GHCV.cpp:685:53: note:   cannot convert '3' (type 'int') to type 'cv::FileStorage&'
+     ::write(3, sendString.c_str(), sendString.size());
+                                                     ^
+In file included from /usr/local/include/opencv2/core.hpp:58:0,
+                 from /usr/local/include/opencv2/core/types_c.h:101,
+                 from /usr/local/include/opencv2/core/core_c.h:48,
+                 from /usr/local/include/opencv/cv.h:63,
+                 from GHCV.cpp:4:
+/usr/local/include/opencv2/core/persistence.hpp:684:6: note: template<class _Tp> void cv::write(cv::FileStorage&, const cv::String&, const cv::Scalar_<_Tp>&)
+ void write(FileStorage& fs, const String& name, const Scalar_<_Tp>& s )
+      ^
+/usr/local/include/opencv2/core/persistence.hpp:684:6: note:   template argument deduction/substitution failed:
+GHCV.cpp:685:53: note:   cannot convert '3' (type 'int') to type 'cv::FileStorage&'
+     ::write(3, sendString.c_str(), sendString.size());
+                                                     ^
+In file included from /usr/local/include/opencv2/core.hpp:58:0,
+                 from /usr/local/include/opencv2/core/types_c.h:101,
+                 from /usr/local/include/opencv2/core/core_c.h:48,
+                 from /usr/local/include/opencv/cv.h:63,
+                 from GHCV.cpp:4:
+/usr/local/include/opencv2/core/persistence.hpp:691:6: note: void cv::write(cv::FileStorage&, const cv::String&, const cv::Range&)
+ void write(FileStorage& fs, const String& name, const Range& r )
+      ^
+/usr/local/include/opencv2/core/persistence.hpp:691:6: note:   no known conversion for argument 1 from 'int' to 'cv::FileStorage&'
+/usr/local/include/opencv2/core/persistence.hpp:698:6: note: template<class _Tp> void cv::write(cv::FileStorage&, const cv::String&, const std::vector<_RealType>&)
+ void write( FileStorage& fs, const String& name, const std::vector<_Tp>& vec )
+      ^
+/usr/local/include/opencv2/core/persistence.hpp:698:6: note:   template argument deduction/substitution failed:
+GHCV.cpp:685:53: note:   cannot convert '3' (type 'int') to type 'cv::FileStorage&'
+     ::write(3, sendString.c_str(), sendString.size());
+                                                     ^
+GHCV_latest_bk.cpp:10:10: warning: invalid suffix on literal; C++11 requires a space between literal and identifier [-Wliteral-suffix]
+ #include <list>k
+          ^
+GHCV_latest_bk.cpp:10:16: warning: extra tokens at end of #include directive [enabled by default]
+ #include <list>k
+                ^
+tcpserver.cpp:4:0: warning: "MAX" redefined [enabled by default]
+ #define MAX 4
+ ^
+In file included from /usr/local/include/opencv2/core.hpp:50:0,
+                 from /usr/local/include/opencv2/core/core.hpp:48,
+                 from tcp.h:25,
+                 from tcpserver.cpp:1:
+/usr/local/include/opencv2/core/cvdef.h:354:0: note: this is the location of the previous definition
+ #  define MAX(a,b)  ((a) < (b) ? (b) : (a))
+ ^
+tcpserver.cpp: In function 'void processTCPConnection(int)':
+tcpserver.cpp:44:35: error: 'CV_WINDOW_AUTOSIZE' was not declared in this scope
+     namedWindow("stream_server1", CV_WINDOW_AUTOSIZE);
+                                   ^
+tcpserver.cpp: In function 'void* masterThread(void*)':
+tcpserver.cpp:149:34: error: 'CV_WINDOW_AUTOSIZE' was not declared in this scope
+     namedWindow("stream_server", CV_WINDOW_AUTOSIZE);
+                                  ^

@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "BEA4E73BEC85C37CE93A60A3E2111540ED81A953",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "E269C7C93068BF40067A80260EE84750C7C843BF" : 0,
+    "BEA4E73BEC85C37CE93A60A3E2111540ED81A953" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "5F67B93D-3D29-4273-87E9-2617F604AF4A",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "E269C7C93068BF40067A80260EE84750C7C843BF" : "",
+    "BEA4E73BEC85C37CE93A60A3E2111540ED81A953" : "MPC"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "opecv-practice",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "ActionRecDemoV3\/opencv-practice\/opecv-practice\/opecv-practice.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/subnr01\/MPC.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "BEA4E73BEC85C37CE93A60A3E2111540ED81A953"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/subnr01\/Projects.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E269C7C93068BF40067A80260EE84750C7C843BF"
+    }
+  ]
+}
