@@ -49,4 +49,6 @@ dependencies: \
   /usr/local/include/opencv2/imgcodecs/imgcodecs_c.h \
   /usr/local/include/opencv2/videoio/videoio_c.h \
   /usr/local/include/opencv2/ml.hpp \
-  /usr/local/include/opencv2/highgui/highgui.hpp
+  /usr/local/include/opencv2/highgui/highgui.hpp \
+  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/temp_priyanka2/ActionRecDemoV3/IntImage.h \
+  /usr/local/include/opencv/cv.h /usr/local/include/opencv/cxcore.h

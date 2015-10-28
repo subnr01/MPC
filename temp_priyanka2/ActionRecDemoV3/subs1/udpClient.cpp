@@ -9,6 +9,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <pthread.h>
 #include <fstream>
+#include "IntImage.h"
 
 using namespace std;
 using namespace cv;
@@ -28,8 +29,6 @@ struct sockaddr_in addr;
 
 void *key_event(void *arg)
 {
-    std::ofstream outfile;
-    outfile.open("/Users/priyankakulkarni/Documents/test.txt", std::ios_base::app);
     
     string str = "left";
     
@@ -39,14 +38,74 @@ void *key_event(void *arg)
             system("/Users/priyankakulkarni/Documents/Project/MPC/keyboard/simulate_keypress_mac copy");
     }
     
-    outfile.close();
+
 
     
     return NULL;
 }
 
+// Draw rectangle function
+
+void drawRect(IntImage* dest, int cx, int cy, int w, int h, int r, int g, int b)
+{
+    int* rc = dest->getChannel(0);
+    int* gc = dest->getChannel(1);
+    int* bc = dest->getChannel(2);
+    int iw = dest->width();
+    int ih = dest->height();
+    
+    // left edge
+    for(int y = cy; y < std::min(ih, cy + h); ++y)
+    {
+        rc[(y * iw) + cx] = r;
+        gc[(y * iw) + cx] = g;
+        bc[(y * iw) + cx] = b;
+    }
+    
+    // right edge
+    if(cx + w < iw)
+    {
+        for(int y = cy; y < std::min(ih, cy + h); ++y)
+        {
+            rc[(y * iw) + cx + w] = r;
+            gc[(y * iw) + cx + w] = g;
+            bc[(y * iw) + cx + w] = b;
+        }
+    }
+    
+    // top edge
+    for(int x = cx; x < std::min(iw, cx + w); ++x)
+    {
+        rc[(cy * iw) + x] = r;
+        gc[(cy * iw) + x] = g;
+        bc[(cy * iw) + x] = b;
+    }
+    
+    // bottom edge
+    if(cy + h < ih)
+    {
+        for(int x = cx; x < std::min(iw, cx + w); ++x)
+        {
+            rc[((cy + h) * iw) + x] = r;
+            gc[((cy + h) * iw) + x] = g;
+            bc[((cy + h) * iw) + x] = b;
+        }
+    }
+}
+
+
 int main()
 {
+    int process_width = 180;
+    int process_height = 144;
+    int display_width = 320;
+    int display_height = 240;
+    
+    int searchX = 20;
+    int searchY = 0;
+    int searchW = 150;
+    int searchH = 65;
+    
     int sockfd;
     int send_len;
     
@@ -86,7 +145,6 @@ int main()
     cvSetCaptureProperty (capture, CV_CAP_PROP_FRAME_HEIGHT, height);
     cvNamedWindow (windowName, CV_WINDOW_AUTOSIZE);
     
-    
     /*
      * Perform jpeg compression
      */
@@ -119,7 +177,36 @@ int main()
             printf("%lu \n", ibuff.size());
         }
         
-        imshow(windowName, Mimg);
+   //     imshow(windowName, Mimg);
+        
+       
+        
+     
+        
+        IplImage* ipl_Mimg_pointer;
+        IntImage* src_Mimg = new IntImage(process_width, process_height, 3);
+        IntImage* dest_Mimg = new IntImage(process_width, process_height, 3);
+        IplImage* display_temp = cvCreateImage(cvSize(process_width, process_height), IPL_DEPTH_8U, 3);
+        IplImage* resizedSrcFrame = cvCreateImage(cvSize(display_width, display_height), IPL_DEPTH_8U, 3);
+        IplImage* resizedPFrame = cvCreateImage(cvSize(process_width, process_height), IPL_DEPTH_8U, 3);
+        
+        IplImage ipl_Mimg = Mimg;
+        
+        ipl_Mimg_pointer = &ipl_Mimg;
+        
+        cvResize(ipl_Mimg_pointer, resizedSrcFrame);
+        cvResize(ipl_Mimg_pointer, resizedPFrame);
+        
+        
+        src_Mimg->copy(resizedSrcFrame, true);
+        dest_Mimg->copy(resizedPFrame, true);
+        
+        drawRect(dest_Mimg, searchX, searchY, searchW, searchH, 255, 255, 255);
+        
+        dest_Mimg->getIplImage(display_temp);
+        
+        cvShowImage("Template Locations", display_temp);
+
         
         int c = cvWaitKey (1);
         if (c == 'q')
