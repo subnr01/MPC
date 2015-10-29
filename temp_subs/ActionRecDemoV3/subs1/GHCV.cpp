@@ -208,7 +208,7 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
 	std::cout << "loading " << actionName << " " << id << std::endl;
 
 	//std::string totalPrefix = "data/" + actionName;
-    std::string totalPrefix = "/Users/admin/data/" + actionName;
+    std::string totalPrefix = "/Users/admin/GITHUB/MPC/" + actionName;
     //std::string totalPrefix = "/home/ubuntu/project/MPC/temp_subs/ActionRecDemoV3/data/" + actionName;
 
 	ActionInstance* ret = new ActionInstance;
