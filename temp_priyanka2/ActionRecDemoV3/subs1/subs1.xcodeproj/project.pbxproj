@@ -52,6 +52,7 @@
 		19F6F1381BE1433600A5FFCD /* tcpclient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tcpclient.cpp; sourceTree = "<group>"; };
 		19F6F1391BE1433600A5FFCD /* tcpclient.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = tcpclient.hpp; sourceTree = "<group>"; };
 		19F6F13A1BE1433600A5FFCD /* udpClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = udpClient.cpp; sourceTree = "<group>"; };
+		19F6F1421BE2837000A5FFCD /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
 		84B6D3661BA338F80040251A /* subs1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = subs1; sourceTree = BUILT_PRODUCTS_DIR; };
 		84B6D3711BA339360040251A /* data.tgz */ = {isa = PBXFileReference; lastKnownFileType = file; name = data.tgz; path = ../data.tgz; sourceTree = "<group>"; };
 		84B6D3721BA339360040251A /* FloatImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FloatImage.cpp; path = ../FloatImage.cpp; sourceTree = "<group>"; };
@@ -723,6 +724,7 @@
 		84B6D35D1BA338F80040251A = {
 			isa = PBXGroup;
 			children = (
+				19F6F1421BE2837000A5FFCD /* util.h */,
 				84EAADA11BD3B32D00523410 /* tcp.h */,
 				84EAADA31BD3B32D00523410 /* blocking_queue.h */,
 				19F6F1381BE1433600A5FFCD /* tcpclient.cpp */,

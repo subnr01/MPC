@@ -1,6 +1,6 @@
 dependencies: \
-  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/temp_priyanka2/ActionRecDemoV3/IntImage.cpp \
-  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/temp_priyanka2/ActionRecDemoV3/IntImage.h \
+  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/MPC/temp_priyanka2/ActionRecDemoV3/IntImage.cpp \
+  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/MPC/temp_priyanka2/ActionRecDemoV3/IntImage.h \
   /usr/local/include/opencv/cv.h \
   /usr/local/include/opencv2/core/core_c.h \
   /usr/local/include/opencv2/core/types_c.h \

@@ -10,6 +10,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <pthread.h>
 #include <fstream>
+#include "IntImage.h"
 
 using namespace std;
 using namespace cv;
@@ -164,7 +165,7 @@ int main()
             printf("%lu \n", ibuff.size());
         }
         
-        rectangle(Mimg,Point(20,0),Point(170,65),Scalar(255,255,0),1,8,0);
+        //rectangle(Mimg,Point(20,0),Point(170,65),Scalar(255,255,0),1,8,0);
         imshow(windowName, Mimg);
         
         

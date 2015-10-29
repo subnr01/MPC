@@ -1,5 +1,5 @@
 dependencies: \
-  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/temp_priyanka2/ActionRecDemoV3/subs1/GHCV.cpp \
+  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/MPC/temp_priyanka2/ActionRecDemoV3/subs1/GHCV.cpp \
   /usr/local/include/opencv/cv.h \
   /usr/local/include/opencv2/core/core_c.h \
   /usr/local/include/opencv2/core/types_c.h \
@@ -32,15 +32,15 @@ dependencies: \
   /usr/local/include/opencv2/highgui/highgui_c.h \
   /usr/local/include/opencv2/imgcodecs/imgcodecs_c.h \
   /usr/local/include/opencv2/videoio/videoio_c.h \
-  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/temp_priyanka2/ActionRecDemoV3/StatMerge.h \
-  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/temp_priyanka2/ActionRecDemoV3/PKUnionFind.h \
-  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/temp_priyanka2/ActionRecDemoV3/FloatImage.h \
-  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/temp_priyanka2/ActionRecDemoV3/IntImage.h \
-  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/temp_priyanka2/ActionRecDemoV3/LinearShapeMatch.h \
-  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/temp_priyanka2/ActionRecDemoV3/subs1/tcp.h \
+  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/MPC/temp_priyanka2/ActionRecDemoV3/StatMerge.h \
+  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/MPC/temp_priyanka2/ActionRecDemoV3/PKUnionFind.h \
+  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/MPC/temp_priyanka2/ActionRecDemoV3/FloatImage.h \
+  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/MPC/temp_priyanka2/ActionRecDemoV3/IntImage.h \
+  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/MPC/temp_priyanka2/ActionRecDemoV3/LinearShapeMatch.h \
+  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/MPC/temp_priyanka2/ActionRecDemoV3/subs1/tcp.h \
   /usr/local/include/opencv2/core/core.hpp \
   /usr/local/include/opencv2/highgui/highgui.hpp \
   /usr/local/include/opencv2/highgui.hpp \
   /usr/local/include/opencv2/imgcodecs.hpp \
   /usr/local/include/opencv2/videoio.hpp \
-  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/temp_priyanka2/ActionRecDemoV3/subs1/blocking_queue.h
+  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/MPC/temp_priyanka2/ActionRecDemoV3/subs1/blocking_queue.h

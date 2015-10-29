@@ -5,44 +5,26 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
+#include "util.h"
+#include "IntImage.h"
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <pthread.h>
 #include <fstream>
-#include "IntImage.h"
 
 using namespace std;
 using namespace cv;
 
-int establishUDP();
+
+#define DEBUG 1
+#define TCP 0
+#define UDP 1
+
+
 
 void *receiveData(void *);
 
-std::ofstream outfile;
 struct sockaddr_in addr;
-
-
-/*
- * thread to inject keyboard
- * event
- */
-
-void *key_event(void *arg)
-{
-    
-    string str = "left";
-    
-    while(1)
-    {
-        if(str=="left")
-            system("/Users/priyankakulkarni/Documents/Project/MPC/keyboard/simulate_keypress_mac copy");
-    }
-    
-
-
-    
-    return NULL;
-}
 
 // Draw rectangle function
 
@@ -94,20 +76,16 @@ void drawRect(IntImage* dest, int cx, int cy, int w, int h, int r, int g, int b)
 }
 
 
+
+
+
+
 int main()
 {
-    int process_width = 180;
-    int process_height = 144;
-    int display_width = 320;
-    int display_height = 240;
-    
-    int searchX = 20;
-    int searchY = 0;
-    int searchW = 150;
-    int searchH = 65;
-    
     int sockfd;
     int send_len;
+    
+    char *serverip = "127.0.0.1";
     
     //char *server_ip = "128.2.213.222";
     pthread_t receive_thread;
@@ -122,28 +100,33 @@ int main()
     char buff[sendSize];
     
     //sockfd = establishUDP(server_ip);
-    sockfd = establishUDP();
+    
+    if (UDP) {
+        if (DEBUG) {
+            cout<<"\n Establishing UDP connection \n";
+        }
+        sockfd = establishUDP(serverip);
+    }
+    else if (TCP) {
+        if (DEBUG) {
+            cout<<"\n Establishing TCP connection \n";
+        }
+        sockfd = establishTCPConnection(serverip);
+    }
     
     /*
      * run the receiving thread
-     
+     */
     if (pthread_create(&receive_thread, NULL, receiveData, &sockfd)) {
         printf("\n--> pthread_create failed.");
     }
-    */
     
-    pthread_t key_event_thread;
-    
-    if(pthread_create(&key_event_thread, NULL, key_event, NULL))
-    {
-        printf("\n--> pthread_create failed.");
-    }
- 
     
     CvCapture *capture = cvCreateCameraCapture(0);
     cvSetCaptureProperty (capture, CV_CAP_PROP_FRAME_WIDTH, width);
     cvSetCaptureProperty (capture, CV_CAP_PROP_FRAME_HEIGHT, height);
     cvNamedWindow (windowName, CV_WINDOW_AUTOSIZE);
+    
     
     /*
      * Perform jpeg compression
@@ -154,7 +137,9 @@ int main()
     param[1] = 50;
     
     imencode(".jpg", Mimg, ibuff, param);
-    cout<<"coded file size(jpg)"<<ibuff.size()<<endl;
+    if (DEBUG) {
+        cout<<"coded file size(jpg)"<<ibuff.size()<<endl;
+    }
     
     while (1) {
         frame = cvQueryFrame (capture);
@@ -165,9 +150,12 @@ int main()
         {
             buff[i]=ibuff[i];
         }
-        
-        send_len = sendto(sockfd, buff, ibuff.size(), 0, (struct sockaddr *)&addr, sizeof(addr));
-        
+        if (UDP) {
+            if (DEBUG) {
+                cout<<"\n Sending Image \n";
+            }
+            send_len = sendto(sockfd, buff, ibuff.size(), 0, (struct sockaddr *)&addr, sizeof(addr));
+        }
         if (send_len == -1)
         {
             perror("socket");
@@ -177,11 +165,19 @@ int main()
             printf("%lu \n", ibuff.size());
         }
         
-   //     imshow(windowName, Mimg);
+        //rectangle(Mimg,Point(20,0),Point(170,65),Scalar(255,255,0),1,8,0);
+        imshow(windowName, Mimg);
         
-       
         
-     
+        int process_width = 180;
+        int process_height = 144;
+        int display_width = 320;
+        int display_height = 240;
+        
+        int searchX = 20;
+        int searchY = 0;
+        int searchW = 150;
+        int searchH = 65;
         
         IplImage* ipl_Mimg_pointer;
         IntImage* src_Mimg = new IntImage(process_width, process_height, 3);
@@ -206,7 +202,6 @@ int main()
         dest_Mimg->getIplImage(display_temp);
         
         cvShowImage("Template Locations", display_temp);
-
         
         int c = cvWaitKey (1);
         if (c == 'q')
@@ -221,7 +216,6 @@ int main()
     }
     
     cvDestroyWindow(windowName);
-    outfile.close();
     close(sockfd);
     return 0;
 }
@@ -235,27 +229,50 @@ int main()
 
 void *receiveData(void *arg)
 {
-    printf("\n Receive thread starts");
+    if (DEBUG) {
+        cout<<"\n Receive thread starts"<<endl;
+    }
+    
     char buff[1024];
     int *sockfd = (int*)arg;
-    outfile.open("output.txt");
     pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
     pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
-    
+    usleep(10000);
     
     while(1)
     {
         memset(buff, 0, 1024);
         int received = recvfrom(*sockfd, buff, 1024, 0, NULL,NULL);
         
+        cout<<endl<<"Received data"<<endl;
+
         if ( received != -1)
         {
             buff[received] = '\0';
-            outfile <<buff;
         }
+
+        cout<<"\n Received buffer data "<<buff<<endl;
+
+        
+        if ( !strcmp(buff, "up")) {
+            system("/Users/priyankakulkarni/Documents/Project/MPC/keyboard/simulate_keypress_up");
+            
+        }
+        else if ( !strcmp(buff, "down")) {
+            system("/Users/priyankakulkarni/Documents/Project/MPC/keyboard/simulate_keypress_down");
+            
+        }
+        
+        
+        
+        
         pthread_testcancel();
         
     }
+    
+    
+    
+    
 }
 
 
@@ -265,16 +282,11 @@ void *receiveData(void *arg)
  */
 
 //int establishUDP(const char *serverip) {
-int establishUDP() {
+int establishUDP(char *serverip) {
     
     int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-    
-    //char *serverip = "128.2.213.222";
-    
-    char *serverip = "127.0.0.1";
-    
     addr.sin_family = AF_INET;
-    addr.sin_port = htons(9000);
+    addr.sin_port = htons(PORT);
     addr.sin_addr.s_addr = inet_addr(serverip);
     
     
@@ -293,3 +305,29 @@ int establishUDP() {
     
 }
 
+
+int establishTCPConnection(char *server_ip)
+{
+    
+    int clientSock;
+    struct  sockaddr_in serverAddr;
+    socklen_t serverAddrLen = sizeof(serverAddr);
+    
+    if ((clientSock = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
+        perror("socket");
+        exit(-1);
+    }
+    serverAddr.sin_family = PF_INET;
+    serverAddr.sin_addr.s_addr = inet_addr(server_ip);
+    serverAddr.sin_port = htons(PORT);
+    
+    if (connect(clientSock, (sockaddr*)&serverAddr, serverAddrLen) < 0) {
+        perror("connect failed");
+        exit(-1);
+    }
+    if (DEBUG) {
+        cout<<"TCP Connect succeeded"<<endl;
+    }
+    
+    return clientSock;
+}

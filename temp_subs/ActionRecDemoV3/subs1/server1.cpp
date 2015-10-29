@@ -84,7 +84,7 @@ int main(int argc, const char * argv[])
             //cv::imshow(windowName, image);
             //client_info.block_queue.push(image);
             
-            for ( int i = 0 ; i < MAX; i++) {
+            for ( int i = 0 ; i < 1; i++) {
                 
                 client_info[i].mydeque.push_front(image);
                 
@@ -97,7 +97,7 @@ int main(int argc, const char * argv[])
              
              //processVideo(&client_info) ;
             if (!threads_created) {
-                for (int i = 0; i < MAX; i++) {
+                for (int i = 0; i < 1; i++) {
                     client_info[i].actionType = i;
                     cout<<"\n creating threads "<<i;
                     client_info[i].udp_client_addr = client_addr;

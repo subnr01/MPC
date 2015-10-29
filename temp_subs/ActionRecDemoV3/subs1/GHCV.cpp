@@ -208,8 +208,11 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
 	std::cout << "loading " << actionName << " " << id << std::endl;
 
 	//std::string totalPrefix = "data/" + actionName;
-    std::string totalPrefix = "/Users/admin/GITHUB/MPC/our_templates/" + actionName;
+    //std::string totalPrefix = "/Users/admin/GITHUB/MPC/our_templates/" + actionName;
+    
     //std::string totalPrefix = "/home/ubuntu/project/MPC/temp_subs/ActionRecDemoV3/data/" + actionName;
+    
+    std::string totalPrefix = "/Users/priyankakulkarni/Documents/Project/MPC/ActionRecDemoV3/thumb_temp/" + actionName;
 
 	ActionInstance* ret = new ActionInstance;
 	ret->tData = new std::vector<FloatImage*>;
@@ -353,6 +356,10 @@ IntImage* renderTemplateFrame(std::vector<FloatImage*>* tData, int f)
 //int main(int argc, char* argv[])
 int processVideo(client_info_t *client_info)
 {
+    int sample_count = 0;
+    int up_count = 0;
+    int down_count = 0;
+    
     
     //Assign the socket descriptor--Subbu
     int sockfd = client_info->connectfd;
@@ -380,7 +387,7 @@ int processVideo(client_info_t *client_info)
 	bool normalizing = true;
 
 	int actionFrames = 9;
-
+/*
 	int numActions = 4;
 	ActionType* actionTypes = new ActionType[numActions];
 	actionTypes[0].actionName = "up";
@@ -399,6 +406,19 @@ int processVideo(client_info_t *client_info)
 	actionTypes[3].actionEnabled = true;
 	actionTypes[3].count = 10;
 	actionTypes[3].sendKey = -1;
+ */
+    int numActions = 2;
+    ActionType* actionTypes = new ActionType[numActions];
+    actionTypes[0].actionName = "down";
+    actionTypes[0].actionEnabled = true;
+    actionTypes[0].count = 3;
+    actionTypes[0].sendKey = 1049;
+    
+    actionTypes[1].actionName = "up";
+    actionTypes[1].actionEnabled = true;
+    actionTypes[1].count = 3;
+    actionTypes[1].sendKey = 1062;
+
 
 	int* voteArray = new int[numActions];
 	int knearestk = 5;
@@ -420,7 +440,7 @@ int processVideo(client_info_t *client_info)
 	std::vector<ActionInstance*> actionInstances;
 
     
-    /*
+    
 	// load the template library
 	std::cout << "Loading action library...\n";
 	for(int at = 0; at < numActions; ++at)
@@ -431,7 +451,7 @@ int processVideo(client_info_t *client_info)
 			actionInstances.push_back(curInstance);
 		}
 	}
- */
+ /*
     // load the template library by threads-Subbu
     int at = client_info->actionType;
     std::cout<<"\n Action type is "<<at<<std::endl;
@@ -440,8 +460,8 @@ int processVideo(client_info_t *client_info)
         ActionInstance* curInstance = loadTemplateByName(actionTypes[at].actionName, at, i+1, actionFrames);
         actionInstances.push_back(curInstance);
     }
-    
- /*
+  
+ 
     std::cout << "Loading action library...\n";
     for(int at = 0; at < numActions; ++at)
     {
@@ -538,7 +558,7 @@ int processVideo(client_info_t *client_info)
 	// enter main loop-- this runs the display as fast as possible
 	while(1)
 	{
-		cout<<endl<<"Entered main loop";
+		//cout<<endl<<"Entered main loop";
 		// deal with timing stuff
         
         if (client_info->mydeque.size() < 10) {
@@ -571,7 +591,7 @@ int processVideo(client_info_t *client_info)
         vector<int> compression_params;
         compression_params.push_back(CV_IMWRITE_JPEG_QUALITY);
         compression_params.push_back(98);
-        bool bSuccess = cv::imwrite("/Users/admin/test.jpg", mat_img, compression_params);
+        bool bSuccess = cv::imwrite("/Users/priyankakulkarni/Documents/Project/MPC/ActionRecDemoV3/thumb_temp/server_images/test.jpg", mat_img, compression_params);
 	    client_info->mydeque.pop_back();
 	     cout<<endl<<"dequeue manipulation done";
         //IplImage ipl_img = mat_img.operator IplImage();
@@ -693,23 +713,72 @@ int processVideo(client_info_t *client_info)
 		//std::string bestAction = actionTypes[best->actionType].actionName;
 		//std::cout << "Best action: " << bestAction << " " << best->id << " with a distance of " << best->dist << std::endl;
 		//std::cout << "Real best dist: " << bestDist << std::endl;
-		std::cout << "\n Best action: " << bestAction << std::endl;
+		
+        
+        
+        std::cout << "\n Best action: " << bestAction << std::endl;
 		std::cout << "\n Send action: " << sendActionName << std::endl;
 		std::cout << "\n Best distance: " << bestDist2 << std::endl;
         
         //send the action information back to the client-Subbu
         std::cout<< " \n send the action back to client "<< sendActionName<< endl;
-        std::cout<<"\n Action is "<<actionTypes[at].actionName<<endl;
+        //std::cout<<"\n Action is "<<actionTypes[at].actionName<<endl;
+        cout<<"\nsample count:  "<<sample_count<<endl;
         
         ssize_t sent = 0;
-        
-        
-        if ( !sendActionName.compare(actionTypes[at].actionName)) {
-            string sendMessage = sendActionName + " " + actionTypes[at].actionName;
-        //    sent = sendto(sockfd, sendActionName.c_str(), sendActionName.size(), NULL, (struct sockaddr* )&client_addr, addr_len);
-            sent = sendto(sockfd, sendMessage.c_str(), sendMessage.size(), NULL, (struct sockaddr* )&client_addr, addr_len);
+        if ( sendActionName.compare("none")) {
+            sample_count++;
+            if (!sendActionName.compare("up")) {
+                up_count++;
+            }
             
+            if (!sendActionName.compare("down")) {
+                down_count++;
+            }
+
         }
+        
+        /*
+        if (!sendActionName.compare("up"))
+        {
+            sample_count++;
+            up_count++;
+        }
+
+        if (!sendActionName.compare("down"))
+        {
+            sample_count++;
+            down_count++;
+        }
+
+        */
+        
+            
+        if ( sample_count > 10) {
+                String message = " ";
+                if (up_count > down_count)
+                {
+                    message = "up";
+                } else {
+                    message = "down";
+                }
+                std::cout<< " \n SENDING TO THE CLIENT "<< sendActionName<< endl;
+                sent = sendto(sockfd, message.c_str(), message.size(), NULL, (struct sockaddr* )&client_addr, addr_len);
+            sample_count = 0;
+            down_count = 0;
+            up_count = 0;
+        }
+        
+        
+        
+        
+        /*
+        if ( !sendActionName.compare(actionTypes[at].actionName)) {
+            //string sendMessage = sendActionName + " " + actionTypes[at].actionName;
+            sent = sendto(sockfd, sendActionName.c_str(), sendActionName.size(), NULL, (struct sockaddr* )&client_addr, addr_len);
+            //sent = sendto(sockfd, sendMessage.c_str(), sendMessage.size(), NULL, (struct sockaddr* )&client_addr, addr_len);
+            
+        }*/
         
         if (sent == -1) {
             cout<< endl << "Sendto failed";

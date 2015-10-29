@@ -1,6 +1,6 @@
 dependencies: \
-  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/temp_priyanka2/ActionRecDemoV3/subs1/tcpclient.cpp \
-  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/temp_priyanka2/ActionRecDemoV3/subs1/tcpclient.hpp \
+  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/MPC/temp_priyanka2/ActionRecDemoV3/subs1/tcpclient.cpp \
+  /Users/priyankakulkarni/Documents/Project/Git\ clone/MPC/MPC/temp_priyanka2/ActionRecDemoV3/subs1/tcpclient.hpp \
   /usr/local/include/opencv2/core/core.hpp \
   /usr/local/include/opencv2/core.hpp \
   /usr/local/include/opencv2/core/cvdef.h \
