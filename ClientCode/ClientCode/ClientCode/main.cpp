@@ -23,8 +23,61 @@ using namespace cv;
 
 void *receiveData(void *);
 
-
 struct sockaddr_in addr;
+
+// Draw rectangle function
+
+void drawRect(IntImage* dest, int cx, int cy, int w, int h, int r, int g, int b)
+{
+    int* rc = dest->getChannel(0);
+    int* gc = dest->getChannel(1);
+    int* bc = dest->getChannel(2);
+    int iw = dest->width();
+    int ih = dest->height();
+    
+    // left edge
+    for(int y = cy; y < std::min(ih, cy + h); ++y)
+    {
+        rc[(y * iw) + cx] = r;
+        gc[(y * iw) + cx] = g;
+        bc[(y * iw) + cx] = b;
+    }
+    
+    // right edge
+    if(cx + w < iw)
+    {
+        for(int y = cy; y < std::min(ih, cy + h); ++y)
+        {
+            rc[(y * iw) + cx + w] = r;
+            gc[(y * iw) + cx + w] = g;
+            bc[(y * iw) + cx + w] = b;
+        }
+    }
+    
+    // top edge
+    for(int x = cx; x < std::min(iw, cx + w); ++x)
+    {
+        rc[(cy * iw) + x] = r;
+        gc[(cy * iw) + x] = g;
+        bc[(cy * iw) + x] = b;
+    }
+    
+    // bottom edge
+    if(cy + h < ih)
+    {
+        for(int x = cx; x < std::min(iw, cx + w); ++x)
+        {
+            rc[((cy + h) * iw) + x] = r;
+            gc[((cy + h) * iw) + x] = g;
+            bc[((cy + h) * iw) + x] = b;
+        }
+    }
+}
+
+
+
+
+
 
 int main()
 {

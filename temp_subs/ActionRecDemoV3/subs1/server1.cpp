@@ -8,7 +8,8 @@
 #include "blocking_queue.h"
 #include <pthread.h>
 
-#define MAX 4
+#define MAX 1
+#define MAX_THREADS 1
 #include<opencv2/opencv.hpp>
 #include <opencv2/highgui/highgui_c.h>
 

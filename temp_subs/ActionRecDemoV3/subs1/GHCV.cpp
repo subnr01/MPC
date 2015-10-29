@@ -208,7 +208,7 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
 	std::cout << "loading " << actionName << " " << id << std::endl;
 
 	//std::string totalPrefix = "data/" + actionName;
-    std::string totalPrefix = "/Users/admin/GITHUB/MPC/" + actionName;
+    std::string totalPrefix = "/Users/admin/GITHUB/MPC/our_templates/" + actionName;
     //std::string totalPrefix = "/home/ubuntu/project/MPC/temp_subs/ActionRecDemoV3/data/" + actionName;
 
 	ActionInstance* ret = new ActionInstance;
@@ -373,31 +373,31 @@ int processVideo(client_info_t *client_info)
 	int display_width = 320;
 	int display_height = 240;
 
-	int searchX = 52;
+	int searchX = 20;
 	int searchY = 0;
-	int searchW = 80;
-	int searchH = 140;
+	int searchW = 150;
+	int searchH = 65;
 	bool normalizing = true;
 
-	int actionFrames = 10;
+	int actionFrames = 9;
 
 	int numActions = 4;
 	ActionType* actionTypes = new ActionType[numActions];
 	actionTypes[0].actionName = "up";
 	actionTypes[0].actionEnabled = true;
-	actionTypes[0].count = 15;
+	actionTypes[0].count = 10;
 	actionTypes[0].sendKey = 1049;
 	actionTypes[1].actionName = "left";
 	actionTypes[1].actionEnabled = true;
-	actionTypes[1].count = 15;
+	actionTypes[1].count = 10;
 	actionTypes[1].sendKey = 1062;
 	actionTypes[2].actionName = "right";
 	actionTypes[2].actionEnabled = true;
-	actionTypes[2].count = 15;
+	actionTypes[2].count = 10;
 	actionTypes[2].sendKey = 1064;
 	actionTypes[3].actionName = "idle";
 	actionTypes[3].actionEnabled = true;
-	actionTypes[3].count = 15;
+	actionTypes[3].count = 10;
 	actionTypes[3].sendKey = -1;
 
 	int* voteArray = new int[numActions];
