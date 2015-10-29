@@ -1,16 +1,13 @@
 //
-//  tcp.h
-//  ServerCode
+//  util.h
+//  subs1
 //
-//  Created by Subs on 10/17/15.
+//  Created by Subs on 10/23/15.
 //  Copyright © 2015 Subs. All rights reserved.
 //
 
-#ifndef tcp_h
-#define tcp_h
-
-
-#define PORT 1234
+#ifndef util_h
+#define util_h
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -26,22 +23,32 @@
 #include <opencv2/highgui/highgui.hpp>
 #include "blocking_queue.h"
 
+#define PORT 9000
+#define MAX_THREADS 4
+
 
 using namespace cv;
 
 typedef struct client_info {
+    struct sockaddr_in udp_client_addr;
     int connectfd;
     std::deque<Mat> mydeque;
     int actionType;
 }client_info_t;
 
+struct UDPrequest{
+    int sock;
+    socklen_t fromlen;
+    struct sockaddr_in from;
+    char *buf;
+};
+
+
+int establishUDPConnection(int port);
+int establishTCPconnection(int port);
+void* slaveThread(void*);
+void* masterThread(void*);
 int processVideo(client_info_t*);
 
-int establishTCPconnection(int);
-void* masterThread(void* arg);
-void* slaveThread(void *);
-void processTCPConnection(int);
-int tcpServer(int port);
 
-
-#endif /* tcp_h */
+#endif /* util_h */

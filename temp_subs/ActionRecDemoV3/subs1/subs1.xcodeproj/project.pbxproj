@@ -33,7 +33,6 @@
 		84B6D3AE1BA339B50040251A /* libopencv_hal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B6D39B1BA339B50040251A /* libopencv_hal.a */; };
 		84E43CA61BD5C06500F37ED8 /* server1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84E43CA51BD5C06500F37ED8 /* server1.cpp */; settings = {ASSET_TAGS = (); }; };
 		84EAAD9F1BD3B2A600523410 /* GHCV.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84EAAD9E1BD3B2A600523410 /* GHCV.cpp */; settings = {ASSET_TAGS = (); }; };
-		84EAADA51BD3B32D00523410 /* tcpserver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84EAADA01BD3B32D00523410 /* tcpserver.cpp */; settings = {ASSET_TAGS = (); }; };
 		84EAADA61BD3B32D00523410 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84EAADA41BD3B32D00523410 /* main.cpp */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
@@ -50,6 +49,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		847AD68F1BDA8B8B00459DB9 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
 		84B6D3661BA338F80040251A /* subs1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = subs1; sourceTree = BUILT_PRODUCTS_DIR; };
 		84B6D3711BA339360040251A /* data.tgz */ = {isa = PBXFileReference; lastKnownFileType = file; name = data.tgz; path = ../data.tgz; sourceTree = "<group>"; };
 		84B6D3721BA339360040251A /* FloatImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FloatImage.cpp; path = ../FloatImage.cpp; sourceTree = "<group>"; };
@@ -686,8 +686,6 @@
 		84B6D6091BA344190040251A /* up_11509.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = up_11509.PNG; sourceTree = "<group>"; };
 		84E43CA51BD5C06500F37ED8 /* server1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = server1.cpp; sourceTree = "<group>"; };
 		84EAAD9E1BD3B2A600523410 /* GHCV.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GHCV.cpp; sourceTree = "<group>"; };
-		84EAADA01BD3B32D00523410 /* tcpserver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tcpserver.cpp; sourceTree = "<group>"; };
-		84EAADA11BD3B32D00523410 /* tcp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tcp.h; sourceTree = "<group>"; };
 		84EAADA31BD3B32D00523410 /* blocking_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blocking_queue.h; sourceTree = "<group>"; };
 		84EAADA41BD3B32D00523410 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -724,9 +722,8 @@
 		84B6D35D1BA338F80040251A = {
 			isa = PBXGroup;
 			children = (
+				847AD68F1BDA8B8B00459DB9 /* util.h */,
 				84E43CA51BD5C06500F37ED8 /* server1.cpp */,
-				84EAADA01BD3B32D00523410 /* tcpserver.cpp */,
-				84EAADA11BD3B32D00523410 /* tcp.h */,
 				84EAADA31BD3B32D00523410 /* blocking_queue.h */,
 				84EAADA41BD3B32D00523410 /* main.cpp */,
 				84EAAD9E1BD3B2A600523410 /* GHCV.cpp */,
@@ -1471,7 +1468,6 @@
 				84B6D3851BA339360040251A /* SegmentMatch.cpp in Sources */,
 				84E43CA61BD5C06500F37ED8 /* server1.cpp in Sources */,
 				84B6D3861BA339360040251A /* StatMerge.cpp in Sources */,
-				84EAADA51BD3B32D00523410 /* tcpserver.cpp in Sources */,
 				84B6D3821BA339360040251A /* IntImage.cpp in Sources */,
 				84B6D3831BA339360040251A /* LinearShapeMatch.cpp in Sources */,
 				84B6D3841BA339360040251A /* Makefile in Sources */,

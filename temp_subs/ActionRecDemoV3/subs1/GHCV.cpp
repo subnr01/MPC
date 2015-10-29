@@ -1,4 +1,4 @@
-// OpenCVTest.cpp : Defines the entry point for the console application.
+ // OpenCVTest.cpp : Defines the entry point for the console application.
 //
 
 #include <opencv/cv.h>
@@ -18,7 +18,7 @@
 #include "FloatImage.h"
 #include "IntImage.h"
 #include "LinearShapeMatch.h"
-#include "tcp.h"
+#include "util.h"
 #include <unistd.h>
 using namespace std;
 
@@ -356,6 +356,8 @@ int processVideo(client_info_t *client_info)
     
     //Assign the socket descriptor--Subbu
     int sockfd = client_info->connectfd;
+    struct sockaddr_in client_addr = client_info->udp_client_addr;
+    socklen_t addr_len = sizeof(client_addr);
     int cameraid; // = 1;
 	int writeFCount = 0;
 	//if (argc==2) cameraid=1;
@@ -418,7 +420,7 @@ int processVideo(client_info_t *client_info)
 	std::vector<ActionInstance*> actionInstances;
 
     
-    
+    /*
 	// load the template library
 	std::cout << "Loading action library...\n";
 	for(int at = 0; at < numActions; ++at)
@@ -429,9 +431,9 @@ int processVideo(client_info_t *client_info)
 			actionInstances.push_back(curInstance);
 		}
 	}
-/*
+ */
     // load the template library by threads-Subbu
-    //int at = client_info->actionType;
+    int at = client_info->actionType;
     std::cout<<"\n Action type is "<<at<<std::endl;
     for(int i = 0; i < actionTypes[at].count; ++i)
     {
@@ -439,7 +441,7 @@ int processVideo(client_info_t *client_info)
         actionInstances.push_back(curInstance);
     }
     
-    */
+ /*
     std::cout << "Loading action library...\n";
     for(int at = 0; at < numActions; ++at)
     {
@@ -449,7 +451,7 @@ int processVideo(client_info_t *client_info)
             actionInstances.push_back(curInstance);
         }
     }
-    
+    */
     
     
     
@@ -457,18 +459,18 @@ int processVideo(client_info_t *client_info)
 
 	//cvWaitKey(1000);
 
-	IntImage* timg = renderTemplateFrame(actionInstances[0]->tData, 2);
-	cvNamedWindow( "Template", CV_WINDOW_AUTOSIZE );
-	IplImage* timgipl = timg->getIplImage();
-	cvShowImage("Template", timgipl);
+	//IntImage* timg = renderTemplateFrame(actionInstances[0]->tData, 2);
+	//cvNamedWindow( "Template", CV_WINDOW_AUTOSIZE );
+	//IplImage* timgipl = timg->getIplImage();
+	//cvShowImage("Template", timgipl);
 
-	cvWaitKey(10);
+	//cvWaitKey(10);
 
 	LinearShapeMatch* lsm = new LinearShapeMatch(process_width, process_height, actionFrames);
 	lsm->setFill(1.0f, true);
 
 	// get access to webcam
-	CvCapture* srcVideoCapture = cvCaptureFromCAM( cameraid );
+	//CvCapture* srcVideoCapture = cvCaptureFromCAM( cameraid );
 
 	float scale_x = display_width / process_width;
 	float scale_y = display_height / process_height;
@@ -505,8 +507,8 @@ int processVideo(client_info_t *client_info)
 	src_segmentation->copyChannel(tempSeg, 0);
 	src_segmentation->copyChannel(tempSegSizes, 1);
 
-	cvNamedWindow( "Source Video", CV_WINDOW_AUTOSIZE );
-	cvNamedWindow( "Template Locations", CV_WINDOW_AUTOSIZE );
+	//cvNamedWindow( "Source Video", CV_WINDOW_AUTOSIZE );
+	//cvNamedWindow( "Template Locations", CV_WINDOW_AUTOSIZE );
 
 	std::cout << "About to enter main loop.\n";
 
@@ -538,6 +540,11 @@ int processVideo(client_info_t *client_info)
 	{
 		cout<<endl<<"Entered main loop";
 		// deal with timing stuff
+        
+        if (client_info->mydeque.size() < 10) {
+            continue;
+        }
+
 		prevTime = curTime;
 		curTime = clock();
 		frontTime = clocktimes.front();
@@ -556,22 +563,29 @@ int processVideo(client_info_t *client_info)
 		cvResize(rawFrame, resizedSrcFrame);
 		cvResize(rawFrame, resizedPFrame);
         */
-        //Popping from the queue --Subbu
-	cout<<endl<<"manipulaintg dequeue";
-	std::cout<<"dequeue size is " <<client_info->mydeque.size();
+        
+                //Popping from the queue --Subbu
+        cout<<endl<<"manipulaintg dequeue";
+	    std::cout<<"dequeue size is " <<client_info->mydeque.size();
         Mat mat_img = client_info->mydeque.back();
-	client_info->mydeque.pop_back();
-	cout<<endl<<"dequeue manipulation done";
+        vector<int> compression_params;
+        compression_params.push_back(CV_IMWRITE_JPEG_QUALITY);
+        compression_params.push_back(98);
+        bool bSuccess = cv::imwrite("/Users/admin/test.jpg", mat_img, compression_params);
+	    client_info->mydeque.pop_back();
+	     cout<<endl<<"dequeue manipulation done";
         //IplImage ipl_img = mat_img.operator IplImage();
         IplImage ipl_img = mat_img;
         rawFrame = &ipl_img;
         cvResize(rawFrame, resizedSrcFrame);
         cvResize(rawFrame, resizedPFrame);
+        
+        
         //resizedSrcFrame = &ipl_img;
         //resizedPFrame = &ipl_img;
-	cout<<endl<<"showing image";
-        cvShowImage("Source Video", resizedSrcFrame);
-		cvWaitKey(10);
+	    //cout<<endl<<"showing image";
+        //  cvShowImage("Source Video", resizedSrcFrame);
+		//cvWaitKey(10);
 
 		src_r_img->copy(resizedPFrame, true);
 		dest_img->copy(resizedPFrame, true);
@@ -679,12 +693,27 @@ int processVideo(client_info_t *client_info)
 		//std::string bestAction = actionTypes[best->actionType].actionName;
 		//std::cout << "Best action: " << bestAction << " " << best->id << " with a distance of " << best->dist << std::endl;
 		//std::cout << "Real best dist: " << bestDist << std::endl;
-		std::cout << "Best action: " << bestAction << std::endl;
-		std::cout << "Send action: " << sendActionName << std::endl;
-		std::cout << "Best distance: " << bestDist2 << std::endl;
+		std::cout << "\n Best action: " << bestAction << std::endl;
+		std::cout << "\n Send action: " << sendActionName << std::endl;
+		std::cout << "\n Best distance: " << bestDist2 << std::endl;
         
         //send the action information back to the client-Subbu
-        send(sockfd, bestAction.c_str(), bestAction.size(), NULL);
+        std::cout<< " \n send the action back to client "<< sendActionName<< endl;
+        std::cout<<"\n Action is "<<actionTypes[at].actionName<<endl;
+        
+        ssize_t sent = 0;
+        
+        
+        if ( !sendActionName.compare(actionTypes[at].actionName)) {
+            string sendMessage = sendActionName + " " + actionTypes[at].actionName;
+        //    sent = sendto(sockfd, sendActionName.c_str(), sendActionName.size(), NULL, (struct sockaddr* )&client_addr, addr_len);
+            sent = sendto(sockfd, sendMessage.c_str(), sendMessage.size(), NULL, (struct sockaddr* )&client_addr, addr_len);
+            
+        }
+        
+        if (sent == -1) {
+            cout<< endl << "Sendto failed";
+        }
         
 		if(sendActionID >= 0)
 		{
