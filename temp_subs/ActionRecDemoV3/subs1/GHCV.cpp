@@ -212,7 +212,7 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
     
     //std::string totalPrefix = "/home/ubuntu/project/MPC/temp_subs/ActionRecDemoV3/data/" + actionName;
     
-    std::string totalPrefix = "/Users/priyankakulkarni/Documents/Project/MPC/ActionRecDemoV3/thumb_temp/" + actionName;
+    std::string totalPrefix = "/Users/priyankakulkarni/Documents/Project/MPC/ActionRecDemoV3/palm_fist_templates/" + actionName;
 
 	ActionInstance* ret = new ActionInstance;
 	ret->tData = new std::vector<FloatImage*>;
@@ -386,7 +386,7 @@ int processVideo(client_info_t *client_info)
 	int searchH = 65;
 	bool normalizing = true;
 
-	int actionFrames = 9;
+	int actionFrames = 5;
 /*
 	int numActions = 4;
 	ActionType* actionTypes = new ActionType[numActions];
@@ -409,12 +409,12 @@ int processVideo(client_info_t *client_info)
  */
     int numActions = 2;
     ActionType* actionTypes = new ActionType[numActions];
-    actionTypes[0].actionName = "down";
+    actionTypes[0].actionName = "left";
     actionTypes[0].actionEnabled = true;
     actionTypes[0].count = 3;
     actionTypes[0].sendKey = 1049;
     
-    actionTypes[1].actionName = "up";
+    actionTypes[1].actionName = "right";
     actionTypes[1].actionEnabled = true;
     actionTypes[1].count = 3;
     actionTypes[1].sendKey = 1062;
@@ -728,11 +728,11 @@ int processVideo(client_info_t *client_info)
         ssize_t sent = 0;
         if ( sendActionName.compare("none")) {
             sample_count++;
-            if (!sendActionName.compare("up")) {
+            if (!sendActionName.compare("left")) {
                 up_count++;
             }
             
-            if (!sendActionName.compare("down")) {
+            if (!sendActionName.compare("right")) {
                 down_count++;
             }
 
@@ -758,9 +758,9 @@ int processVideo(client_info_t *client_info)
                 String message = " ";
                 if (up_count > down_count)
                 {
-                    message = "up";
+                    message = "left";
                 } else {
-                    message = "down";
+                    message = "right";
                 }
                 std::cout<< " \n SENDING TO THE CLIENT "<< sendActionName<< endl;
                 sent = sendto(sockfd, message.c_str(), message.size(), NULL, (struct sockaddr* )&client_addr, addr_len);

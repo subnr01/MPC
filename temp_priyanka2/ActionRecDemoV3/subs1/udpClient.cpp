@@ -85,7 +85,8 @@ int main()
     int sockfd;
     int send_len;
     
-    char *serverip = "127.0.0.1";
+ //   char *serverip = "127.0.0.1";
+    char *serverip = "128.2.213.227";
     
     //char *server_ip = "128.2.213.222";
     pthread_t receive_thread;
@@ -159,10 +160,10 @@ int main()
         if (send_len == -1)
         {
             perror("socket");
-            printf("%lu \n", ibuff.size());
+            exit(1);
         } else
         {
-            printf("%lu \n", ibuff.size());
+            printf("buffer size %lu \n", ibuff.size());
         }
         
         //rectangle(Mimg,Point(20,0),Point(170,65),Scalar(255,255,0),1,8,0);
@@ -254,11 +255,11 @@ void *receiveData(void *arg)
         cout<<"\n Received buffer data "<<buff<<endl;
 
         
-        if ( !strcmp(buff, "up")) {
+        if ( !strcmp(buff, "left")) {
             system("/Users/priyankakulkarni/Documents/Project/MPC/keyboard/simulate_keypress_up");
             
         }
-        else if ( !strcmp(buff, "down")) {
+        else if ( !strcmp(buff, "right")) {
             system("/Users/priyankakulkarni/Documents/Project/MPC/keyboard/simulate_keypress_down");
             
         }
