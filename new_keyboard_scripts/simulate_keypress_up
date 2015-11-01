@@ -1,0 +1,11 @@
+echo "
+tell application \"System Events\"
+set now to the seconds of the (current date)
+set later to now + 1
+if later > 60 then set later to later - 60
+repeat while the seconds of the (current date) is not later
+#key down (key code 32)
+keystroke 
+end repeat
+delay 1
+end tell" | osascript

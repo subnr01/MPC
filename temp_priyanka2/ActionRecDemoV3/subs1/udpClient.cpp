@@ -85,8 +85,8 @@ int main()
     int sockfd;
     int send_len;
     
- //   char *serverip = "127.0.0.1";
-    char *serverip = "128.2.213.227";
+    char *serverip = "127.0.0.1";
+    //char *serverip = "128.2.213.227";
     
     //char *server_ip = "128.2.213.222";
     pthread_t receive_thread;
@@ -239,8 +239,9 @@ void *receiveData(void *arg)
     pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
     pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
     usleep(10000);
-    
-    while(1)
+    int i = 0;
+    int j = 0;
+    while(i < 65,500)
     {
         memset(buff, 0, 1024);
         int received = recvfrom(*sockfd, buff, 1024, 0, NULL,NULL);
@@ -255,15 +256,19 @@ void *receiveData(void *arg)
         cout<<"\n Received buffer data "<<buff<<endl;
 
         
-        if ( !strcmp(buff, "left")) {
+        if ( !strcmp(buff, "fist")) {
             system("/Users/priyankakulkarni/Documents/Project/MPC/keyboard/simulate_keypress_up");
             
         }
-        else if ( !strcmp(buff, "right")) {
+        else if ( !strcmp(buff, "palm")) {
             system("/Users/priyankakulkarni/Documents/Project/MPC/keyboard/simulate_keypress_down");
             
         }
-        
+        if ( i > 65,490 && j < 3 ) {
+            i = 0;
+            j++;
+        }
+        i++;
         
         
         
@@ -271,7 +276,7 @@ void *receiveData(void *arg)
         
     }
     
-    
+    cout<<"\n THREAD EXITING \n";
     
     
 }

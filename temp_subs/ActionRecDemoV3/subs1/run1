@@ -1,0 +1,12 @@
+echo "set i to 0
+repeat while i<100
+set i to i + 1
+delay 0.5
+if i<90
+tell application \"System Events\" to key code 124 using option down
+#else if i<4 then
+#tell application \"System Events\" to key code 123 using option down
+end if
+delay 1
+end repeat" | osascript
+

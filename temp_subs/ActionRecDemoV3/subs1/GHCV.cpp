@@ -20,6 +20,12 @@
 #include "LinearShapeMatch.h"
 #include "util.h"
 #include <unistd.h>
+#include <stdlib.h>
+#define DELAY 2
+
+#define SAMPLING 5
+
+
 using namespace std;
 
 const double TIME_CALC_FRAMES = 1;
@@ -143,7 +149,8 @@ std::string IntToString(int number)
 
 void writeImage(IplImage* img, std::string prefix, int curNum)
 {
-	std::string filename = prefix + IntToString(curNum) + ".PNG";
+	//std::string filename = prefix + IntToString(curNum) + ".PNG";
+	std::string filename = prefix + IntToString(curNum) + ".png";
 	cvSaveImage(filename.c_str(), img);
 }
 
@@ -213,6 +220,12 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
     //std::string totalPrefix = "/home/ubuntu/project/MPC/temp_subs/ActionRecDemoV3/data/" + actionName;
     
     std::string totalPrefix = "/Users/priyankakulkarni/Documents/Project/MPC/ActionRecDemoV3/palm_fist_templates/" + actionName;
+    
+    
+        //std::string totalPrefix = "/home/ubuntu/project/MPC/palm_fist_templates/" + actionName;
+    
+    
+    
 
 	ActionInstance* ret = new ActionInstance;
 	ret->tData = new std::vector<FloatImage*>;
@@ -224,7 +237,8 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
 	for(int i = 0; i < count; ++i)
 	{
 		int curNum = 10000 + (100 * id) + i;
-		std::string fname = totalPrefix + "_" + IntToString(curNum) + ".PNG";
+		//std::string fname = totalPrefix + "_" + IntToString(curNum) + ".PNG";
+		std::string fname = totalPrefix + "_" + IntToString(curNum) + ".png";
 		std::cout << "Filename: " << fname << std::endl;
 		IntImage* tempII = new IntImage(cvLoadImage(fname.c_str()));
 		int* c0 = tempII->getChannel(0);
@@ -256,7 +270,7 @@ void drawRectangle(IntImage* dest, int cx, int cy, int w, int h, int r, int g, i
 	int iw = dest->width();
 	int ih = dest->height();
 
-	// left edge
+	// fist edge
 	for(int y = cy; y < std::min(ih, cy + h); ++y)
 	{
 		rc[(y * iw) + cx] = r;
@@ -264,7 +278,7 @@ void drawRectangle(IntImage* dest, int cx, int cy, int w, int h, int r, int g, i
 		bc[(y * iw) + cx] = b;
 	}
 
-	// right edge
+	// palm edge
 	if(cx + w < iw)
 	{
 		for(int y = cy; y < std::min(ih, cy + h); ++y)
@@ -357,8 +371,8 @@ IntImage* renderTemplateFrame(std::vector<FloatImage*>* tData, int f)
 int processVideo(client_info_t *client_info)
 {
     int sample_count = 0;
-    int up_count = 0;
-    int down_count = 0;
+    int fist_count = 0;
+    int palm_count = 0;
     
     
     //Assign the socket descriptor--Subbu
@@ -394,11 +408,11 @@ int processVideo(client_info_t *client_info)
 	actionTypes[0].actionEnabled = true;
 	actionTypes[0].count = 10;
 	actionTypes[0].sendKey = 1049;
-	actionTypes[1].actionName = "left";
+	actionTypes[1].actionName = "fist";
 	actionTypes[1].actionEnabled = true;
 	actionTypes[1].count = 10;
 	actionTypes[1].sendKey = 1062;
-	actionTypes[2].actionName = "right";
+	actionTypes[2].actionName = "palm";
 	actionTypes[2].actionEnabled = true;
 	actionTypes[2].count = 10;
 	actionTypes[2].sendKey = 1064;
@@ -409,12 +423,12 @@ int processVideo(client_info_t *client_info)
  */
     int numActions = 2;
     ActionType* actionTypes = new ActionType[numActions];
-    actionTypes[0].actionName = "left";
+    actionTypes[0].actionName = "fist";
     actionTypes[0].actionEnabled = true;
     actionTypes[0].count = 3;
     actionTypes[0].sendKey = 1049;
     
-    actionTypes[1].actionName = "right";
+    actionTypes[1].actionName = "palm";
     actionTypes[1].actionEnabled = true;
     actionTypes[1].count = 3;
     actionTypes[1].sendKey = 1062;
@@ -539,7 +553,7 @@ int processVideo(client_info_t *client_info)
 	int last_delay = 0;
 
 	float desired_delay = 1.0f / 12.0f;
-	cout<<endl<<"preparing timing stuff";
+	//cout<<endl<<"preparing timing stuff";
 	/*
 	clock_t cst = clock();
 	std::cout << "cst: " << cst << std::endl;
@@ -554,14 +568,15 @@ int processVideo(client_info_t *client_info)
 
 	clock_t prevTime = clock();
 	curTime = clock();
-
+    int index = 0;
+    
 	// enter main loop-- this runs the display as fast as possible
 	while(1)
 	{
 		//cout<<endl<<"Entered main loop";
 		// deal with timing stuff
         
-        if (client_info->mydeque.size() < 10) {
+        if (client_info->mydeque.size() < DELAY) {
             continue;
         }
 
@@ -574,8 +589,8 @@ int processVideo(client_info_t *client_info)
 
 		avg_delay = (float)(curTime - prevTime) / (float)(TIME_CALC_FRAMES * clockFactor); // * CLOCKS_PER_SEC);
 		fps = 1.0f / avg_delay;
-		std::cout << "avg_delay: " << avg_delay << std::endl;
-		std::cout << "fps: " << fps << std::endl;
+		//std::cout << "avg_delay: " << avg_delay << std::endl;
+		//std::cout << "fps: " << fps << std::endl;
         
         /*
 		// grab a frame
@@ -585,15 +600,18 @@ int processVideo(client_info_t *client_info)
         */
         
                 //Popping from the queue --Subbu
-        cout<<endl<<"manipulaintg dequeue";
-	    std::cout<<"dequeue size is " <<client_info->mydeque.size();
+        //cout<<endl<<"manipulaintg dequeue";
+	    //std::cout<<"dequeue size is " <<client_info->mydeque.size();
         Mat mat_img = client_info->mydeque.back();
         vector<int> compression_params;
         compression_params.push_back(CV_IMWRITE_JPEG_QUALITY);
         compression_params.push_back(98);
-        bool bSuccess = cv::imwrite("/Users/priyankakulkarni/Documents/Project/MPC/ActionRecDemoV3/thumb_temp/server_images/test.jpg", mat_img, compression_params);
+        
+        
+        
+        
 	    client_info->mydeque.pop_back();
-	     cout<<endl<<"dequeue manipulation done";
+	    // cout<<endl<<"dequeue manipulation done";
         //IplImage ipl_img = mat_img.operator IplImage();
         IplImage ipl_img = mat_img;
         rawFrame = &ipl_img;
@@ -716,57 +734,69 @@ int processVideo(client_info_t *client_info)
 		
         
         
-        std::cout << "\n Best action: " << bestAction << std::endl;
-		std::cout << "\n Send action: " << sendActionName << std::endl;
-		std::cout << "\n Best distance: " << bestDist2 << std::endl;
+        //std::cout << "\n Best action: " << bestAction << std::endl;
+		//std::cout << "\n Send action: " << sendActionName << std::endl;
+		//std::cou
+        cout << "\n Best distance: " << bestDist2 << std::endl;
+        string fdir = "/Users/priyankakulkarni/Documents/Project/MPC/ActionRecDemoV3/thumb_temp/server_images/";
+        ///itoa(index,bindex,10);
+        stringstream ss;
+        ss << index;
+        string myString = ss.str();
+        string fname = fdir + "test" + myString+".jpg";
+        cout <<fname;
+        bool bSuccess = cv::imwrite(fname, mat_img, compression_params);
+        
+        
+        cout<< "\n fname = "<<fname<<" send action: "<<sendActionName;
         
         //send the action information back to the client-Subbu
-        std::cout<< " \n send the action back to client "<< sendActionName<< endl;
+        //std::cout<< " \n send the action back to client "<< sendActionName<< endl;
         //std::cout<<"\n Action is "<<actionTypes[at].actionName<<endl;
-        cout<<"\nsample count:  "<<sample_count<<endl;
+        //cout<<"\nsample count:  "<<sample_count<<endl;
         
         ssize_t sent = 0;
         if ( sendActionName.compare("none")) {
             sample_count++;
-            if (!sendActionName.compare("left")) {
-                up_count++;
+            if (!sendActionName.compare("fist")) {
+                fist_count++;
             }
             
-            if (!sendActionName.compare("right")) {
-                down_count++;
+            if (!sendActionName.compare("palm")) {
+                palm_count++;
             }
 
         }
+        index++;
         
         /*
         if (!sendActionName.compare("up"))
         {
             sample_count++;
-            up_count++;
+            fist_count++;
         }
 
         if (!sendActionName.compare("down"))
         {
             sample_count++;
-            down_count++;
+            palm_count++;
         }
 
         */
-        
             
-        if ( sample_count > 10) {
+        if ( sample_count > SAMPLING ) {
                 String message = " ";
-                if (up_count > down_count)
+                if (fist_count >= palm_count)
                 {
-                    message = "left";
+                    message = "fist";
                 } else {
-                    message = "right";
+                    message = "palm";
                 }
-                std::cout<< " \n SENDING TO THE CLIENT "<< sendActionName<< endl;
+                std::cout<< " \n SENDING TO THE CLIENT "<< message<< endl;
                 sent = sendto(sockfd, message.c_str(), message.size(), NULL, (struct sockaddr* )&client_addr, addr_len);
             sample_count = 0;
-            down_count = 0;
-            up_count = 0;
+            palm_count = 0;
+            fist_count = 0;
         }
         
         
@@ -796,7 +826,7 @@ int processVideo(client_info_t *client_info)
 
 		drawRectangle(dest_img, searchX, searchY, searchW, searchH, 255, 255, 255);
 		dest_img->getIplImage(display_temp);
-		cvShowImage("Template Locations", display_temp);
+		//cvShowImage("Template Locations", display_temp);
 
 		//copy3ItoU(seg_r, seg_b, seg_g, segmentation_temp);
 		//cvShowImage("Segmentation", segmentation_temp);

@@ -1,0 +1,3 @@
+echo "
+tell application \"System Events\" to key code 2
+end tell" | osascript

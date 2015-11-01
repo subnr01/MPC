@@ -98,7 +98,7 @@ int main(int argc, const char * argv[])
              //processVideo(&client_info) ;
             if (!threads_created) {
                 for (int i = 0; i < 1; i++) {
-                    client_info[i].actionType = i;
+                    //client_info[i].actionType = i;
                     cout<<"\n creating threads "<<i;
                     client_info[i].udp_client_addr = client_addr;
                     client_info[i].connectfd = sock;
