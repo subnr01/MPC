@@ -7,14 +7,13 @@
 //
 
 #include <iostream>
-#include "tcp.h"
 
-using namespace cv;
+
 
 int main3(int argc, const char * argv[]) {
-   
+    std::cout<<"\n hello world";
     // insert code here...
-    tcpServer(PORT);
+    //tcpServer(PORT);
     //udpServer(PORT);
     return 0;
 }

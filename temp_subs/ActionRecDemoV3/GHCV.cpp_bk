@@ -20,9 +20,8 @@
 #include "LinearShapeMatch.h"
 #include "util.h"
 #include <unistd.h>
-#define DELAY 2
+#define DELAY 5
 
-        #define SAMPLING 10
 using namespace std;
 
 const double TIME_CALC_FRAMES = 1;
@@ -262,7 +261,7 @@ void drawRectangle(IntImage* dest, int cx, int cy, int w, int h, int r, int g, i
 	int iw = dest->width();
 	int ih = dest->height();
 
-	// fist edge
+	// left edge
 	for(int y = cy; y < std::min(ih, cy + h); ++y)
 	{
 		rc[(y * iw) + cx] = r;
@@ -270,7 +269,7 @@ void drawRectangle(IntImage* dest, int cx, int cy, int w, int h, int r, int g, i
 		bc[(y * iw) + cx] = b;
 	}
 
-	// palm edge
+	// right edge
 	if(cx + w < iw)
 	{
 		for(int y = cy; y < std::min(ih, cy + h); ++y)
@@ -363,8 +362,8 @@ IntImage* renderTemplateFrame(std::vector<FloatImage*>* tData, int f)
 int processVideo(client_info_t *client_info)
 {
     int sample_count = 0;
-    int fist_count = 0;
-    int palm_count = 0;
+    int left_count = 0;
+    int right_count = 0;
     
     
     //Assign the socket descriptor--Subbu
@@ -400,11 +399,11 @@ int processVideo(client_info_t *client_info)
 	actionTypes[0].actionEnabled = true;
 	actionTypes[0].count = 10;
 	actionTypes[0].sendKey = 1049;
-	actionTypes[1].actionName = "fist";
+	actionTypes[1].actionName = "left";
 	actionTypes[1].actionEnabled = true;
 	actionTypes[1].count = 10;
 	actionTypes[1].sendKey = 1062;
-	actionTypes[2].actionName = "palm";
+	actionTypes[2].actionName = "right";
 	actionTypes[2].actionEnabled = true;
 	actionTypes[2].count = 10;
 	actionTypes[2].sendKey = 1064;
@@ -415,12 +414,12 @@ int processVideo(client_info_t *client_info)
  */
     int numActions = 2;
     ActionType* actionTypes = new ActionType[numActions];
-    actionTypes[0].actionName = "fist";
+    actionTypes[0].actionName = "left";
     actionTypes[0].actionEnabled = true;
     actionTypes[0].count = 3;
     actionTypes[0].sendKey = 1049;
     
-    actionTypes[1].actionName = "palm";
+    actionTypes[1].actionName = "right";
     actionTypes[1].actionEnabled = true;
     actionTypes[1].count = 3;
     actionTypes[1].sendKey = 1062;
@@ -734,12 +733,12 @@ int processVideo(client_info_t *client_info)
         ssize_t sent = 0;
         if ( sendActionName.compare("none")) {
             sample_count++;
-            if (!sendActionName.compare("fist")) {
-                fist_count++;
+            if (!sendActionName.compare("up")) {
+                left_count++;
             }
             
-            if (!sendActionName.compare("palm")) {
-                palm_count++;
+            if (!sendActionName.compare("down")) {
+                right_count++;
             }
 
         }
@@ -748,30 +747,31 @@ int processVideo(client_info_t *client_info)
         if (!sendActionName.compare("up"))
         {
             sample_count++;
-            fist_count++;
+            left_count++;
         }
 
         if (!sendActionName.compare("down"))
         {
             sample_count++;
-            palm_count++;
+            right_count++;
         }
 
         */
+        
             
-        if ( sample_count > SAMPLING ) {
+        if ( sample_count > DELAY) {
                 String message = " ";
-                if (fist_count >= palm_count)
+                if (left_count > right_count)
                 {
-                    message = "fist";
+                    message = "left";
                 } else {
-                    message = "palm";
+                    message = "right";
                 }
-                std::cout<< " \n SENDING TO THE CLIENT "<< message<< endl;
+                std::cout<< " \n SENDING TO THE CLIENT "<< sendActionName<< endl;
                 sent = sendto(sockfd, message.c_str(), message.size(), NULL, (struct sockaddr* )&client_addr, addr_len);
             sample_count = 0;
-            palm_count = 0;
-            fist_count = 0;
+            right_count = 0;
+            left_count = 0;
         }
         
         
