@@ -19,7 +19,7 @@ LinearShapeMatch::LinearShapeMatch(int vidWidth, int vidHeight, int bufFrames, i
 	{
 		_bufFrames.push_back(new IntImage(_width, _height, 2));
 		_bufFrames[f]->fill(0);
-	}
+	} 
 
 	_retImage = new FloatImage(_width, _height);
 	_twidth = -1;

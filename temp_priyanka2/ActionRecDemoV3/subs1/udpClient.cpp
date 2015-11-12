@@ -76,17 +76,13 @@ void drawRect(IntImage* dest, int cx, int cy, int w, int h, int r, int g, int b)
 }
 
 
-
-
-
-
 int main()
 {
     int sockfd;
     int send_len;
     
     char *serverip = "127.0.0.1";
-    //char *serverip = "128.2.213.227";
+  //  char *serverip = "128.2.213.227";
     
     //char *server_ip = "128.2.213.222";
     pthread_t receive_thread;
@@ -126,6 +122,9 @@ int main()
     CvCapture *capture = cvCreateCameraCapture(0);
     cvSetCaptureProperty (capture, CV_CAP_PROP_FRAME_WIDTH, width);
     cvSetCaptureProperty (capture, CV_CAP_PROP_FRAME_HEIGHT, height);
+    
+    cvSetCaptureProperty(capture, CV_CAP_PROP_FPS, 3.0);
+    
     cvNamedWindow (windowName, CV_WINDOW_AUTOSIZE);
     
     
@@ -137,6 +136,7 @@ int main()
     param[0] = CV_IMWRITE_JPEG_QUALITY;
     param[1] = 50;
     
+    
     imencode(".jpg", Mimg, ibuff, param);
     if (DEBUG) {
         cout<<"coded file size(jpg)"<<ibuff.size()<<endl;
@@ -145,6 +145,12 @@ int main()
     while (1) {
         frame = cvQueryFrame (capture);
         Mimg = cvarrToMat(frame);
+        
+        if(capture)
+             cout<<"uh oh :"<<endl;
+        
+    
+
         
         imencode(".jpg", Mimg, ibuff, param);
         for (int i = 0; i < ibuff.size(); i++)
@@ -241,7 +247,9 @@ void *receiveData(void *arg)
     usleep(10000);
     int i = 0;
     int j = 0;
-    while(i < 65,500)
+    
+    //while(i < 65,500)
+    while (1)
     {
         memset(buff, 0, 1024);
         int received = recvfrom(*sockfd, buff, 1024, 0, NULL,NULL);
@@ -256,22 +264,24 @@ void *receiveData(void *arg)
         cout<<"\n Received buffer data "<<buff<<endl;
 
         
-        if ( !strcmp(buff, "fist")) {
-            system("/Users/priyankakulkarni/Documents/Project/MPC/keyboard/simulate_keypress_up");
+        if ( !strcmp(buff, "left")) {
+            system("/Users/priyankakulkarni/Documents/Project/MPC/keyboard/simulate_keypress_fist_print");
             
         }
-        else if ( !strcmp(buff, "palm")) {
-            system("/Users/priyankakulkarni/Documents/Project/MPC/keyboard/simulate_keypress_down");
+        else if ( !strcmp(buff, "right")) {
+            system("/Users/priyankakulkarni/Documents/Project/MPC/keyboard/simulate_keypress_palm_print");
             
         }
+        
+        /*
         if ( i > 65,490 && j < 3 ) {
             i = 0;
             j++;
-        }
+        }*/
+        
+        
         i++;
-        
-        
-        
+  
         pthread_testcancel();
         
     }

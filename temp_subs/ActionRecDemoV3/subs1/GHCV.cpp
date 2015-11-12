@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #define DELAY 2
 
-#define SAMPLING 5
+#define SAMPLING 6
 
 
 using namespace std;
@@ -219,8 +219,10 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
     
     //std::string totalPrefix = "/home/ubuntu/project/MPC/temp_subs/ActionRecDemoV3/data/" + actionName;
     
-    std::string totalPrefix = "/Users/priyankakulkarni/Documents/Project/MPC/ActionRecDemoV3/palm_fist_templates/" + actionName;
+ //   std::string totalPrefix = "/Users/priyankakulkarni/Documents/Project/MPC/ActionRecDemoV3/palm_fist_templates/" + actionName;
     
+    std::string totalPrefix = "/Users/priyankakulkarni/Documents/Project/MPC/ActionRecDemoV3/breakout_templates_resized/" + actionName;
+
     
         //std::string totalPrefix = "/home/ubuntu/project/MPC/palm_fist_templates/" + actionName;
     
@@ -371,8 +373,8 @@ IntImage* renderTemplateFrame(std::vector<FloatImage*>* tData, int f)
 int processVideo(client_info_t *client_info)
 {
     int sample_count = 0;
-    int fist_count = 0;
-    int palm_count = 0;
+    int left_count = 0;
+    int right_count = 0;
     
     
     //Assign the socket descriptor--Subbu
@@ -389,8 +391,10 @@ int processVideo(client_info_t *client_info)
         //return 0;
     }
 	// define processing and display resolutions
-	int process_width = 180;
-	int process_height = 144;
+//	int process_width = 180;
+//	int process_height = 144;
+    int process_width = 180;
+    int process_height = 101;
 	int display_width = 320;
 	int display_height = 240;
 
@@ -400,7 +404,7 @@ int processVideo(client_info_t *client_info)
 	int searchH = 65;
 	bool normalizing = true;
 
-	int actionFrames = 5;
+	int actionFrames = 20;
 /*
 	int numActions = 4;
 	ActionType* actionTypes = new ActionType[numActions];
@@ -423,14 +427,14 @@ int processVideo(client_info_t *client_info)
  */
     int numActions = 2;
     ActionType* actionTypes = new ActionType[numActions];
-    actionTypes[0].actionName = "fist";
+    actionTypes[0].actionName = "left";
     actionTypes[0].actionEnabled = true;
-    actionTypes[0].count = 3;
+    actionTypes[0].count = 4;
     actionTypes[0].sendKey = 1049;
     
-    actionTypes[1].actionName = "palm";
+    actionTypes[1].actionName = "right";
     actionTypes[1].actionEnabled = true;
-    actionTypes[1].count = 3;
+    actionTypes[1].count = 4;
     actionTypes[1].sendKey = 1062;
 
 
@@ -504,7 +508,7 @@ int processVideo(client_info_t *client_info)
 	lsm->setFill(1.0f, true);
 
 	// get access to webcam
-	//CvCapture* srcVideoCapture = cvCaptureFromCAM( cameraid );
+	//pture* srcVideoCapture = cvCaptureFromCAM( cameraid );
 
 	float scale_x = display_width / process_width;
 	float scale_y = display_height / process_height;
@@ -758,12 +762,12 @@ int processVideo(client_info_t *client_info)
         ssize_t sent = 0;
         if ( sendActionName.compare("none")) {
             sample_count++;
-            if (!sendActionName.compare("fist")) {
-                fist_count++;
+            if (!sendActionName.compare("left")) {
+                left_count++;
             }
             
             if (!sendActionName.compare("palm")) {
-                palm_count++;
+                right_count++;
             }
 
         }
@@ -786,17 +790,17 @@ int processVideo(client_info_t *client_info)
             
         if ( sample_count > SAMPLING ) {
                 String message = " ";
-                if (fist_count >= palm_count)
+                if (left_count >= right_count)
                 {
-                    message = "fist";
+                    message = "left";
                 } else {
-                    message = "palm";
+                    message = "right";
                 }
                 std::cout<< " \n SENDING TO THE CLIENT "<< message<< endl;
                 sent = sendto(sockfd, message.c_str(), message.size(), NULL, (struct sockaddr* )&client_addr, addr_len);
             sample_count = 0;
-            palm_count = 0;
-            fist_count = 0;
+            right_count = 0;
+            left_count = 0;
         }
         
         

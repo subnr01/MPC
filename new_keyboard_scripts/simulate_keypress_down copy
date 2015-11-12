@@ -1,3 +1,3 @@
 echo "
-tell application \"System Events\" to key code 2
+tell application \"System Events\" to keystroke (key code 123) using option down
 end tell" | osascript
