@@ -597,6 +597,8 @@ int processVideo(client_info_t *client_info)
         vector<int> compression_params;
         compression_params.push_back(CV_IMWRITE_JPEG_QUALITY);
         compression_params.push_back(98);
+	
+
         bool bSuccess = cv::imwrite("~/project/MPC/temp_subs/ActionRecDemoV3/server_images/test.jpg", mat_img, compression_params);
 	    client_info->mydeque.pop_back();
 	     cout<<endl<<"dequeue manipulation done";
@@ -730,7 +732,8 @@ int processVideo(client_info_t *client_info)
         std::cout<< " \n send the action back to client "<< sendActionName<< endl;
         //std::cout<<"\n Action is "<<actionTypes[at].actionName<<endl;
         cout<<"\nsample count:  "<<sample_count<<endl;
-        
+       
+ 
         ssize_t sent = 0;
         if ( sendActionName.compare("none")) {
             sample_count++;
@@ -761,12 +764,16 @@ int processVideo(client_info_t *client_info)
             
         if ( sample_count > SAMPLING ) {
                 String message = " ";
-                if (left_count >= right_count)
+                if (left_count > right_count)
                 {
                     message = "left";
-                } else {
+                } else if(right_count > left_count) {
                     message = "right";
                 }
+		else
+		{
+		    message = "none";
+		}
                 std::cout<< " \n SENDING TO THE CLIENT "<< message<< endl;
                 sent = sendto(sockfd, message.c_str(), message.size(), NULL, (struct sockaddr* )&client_addr, addr_len);
             sample_count = 0;
