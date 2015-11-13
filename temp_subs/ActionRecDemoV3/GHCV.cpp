@@ -597,7 +597,7 @@ int processVideo(client_info_t *client_info)
         vector<int> compression_params;
         compression_params.push_back(CV_IMWRITE_JPEG_QUALITY);
         compression_params.push_back(98);
-        bool bSuccess = cv::imwrite("/Users/priyankakulkarni/Documents/Project/MPC/ActionRecDemoV3/thumb_temp/server_images/test.jpg", mat_img, compression_params);
+        bool bSuccess = cv::imwrite("~/project/MPC/temp_subs/ActionRecDemoV3/server_images/test.jpg", mat_img, compression_params);
 	    client_info->mydeque.pop_back();
 	     cout<<endl<<"dequeue manipulation done";
         //IplImage ipl_img = mat_img.operator IplImage();
