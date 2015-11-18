@@ -22,14 +22,14 @@
 #include <unistd.h>
 #define DELAY 2
 
-        #define SAMPLING 3
+        #define SAMPLING 1
 using namespace std;
 
 const double TIME_CALC_FRAMES = 1;
 
 const int DB = 0;
 
-const float THRESH = 0.15f;
+const float THRESH = 0.7f;
 
 const int WRITE_FRAMES = 200;
 
@@ -365,7 +365,7 @@ int processVideo(client_info_t *client_info)
     int sample_count = 0;
     int left_count = 0;
     int right_count = 0;
-    int idle_couunt = 0; 
+    int idle_count = 0; 
     
     //Assign the socket descriptor--Subbu
     int sockfd = client_info->connectfd;
@@ -428,7 +428,7 @@ int processVideo(client_info_t *client_info)
     actionTypes[2].actionName = "idle";
     actionTypes[2].actionEnabled = true;
     actionTypes[2].count = 4;
-    actionTypes[2].sendKey = -1;
+    actionTypes[2].sendKey = 1;
 
 	int* voteArray = new int[numActions];
 	int knearestk = 5;
@@ -664,8 +664,10 @@ int processVideo(client_info_t *client_info)
 
 		// get the k nearest to vote
 		for(int i = 0; i < knearestk; ++i)
+		{	
+			if(actionInstances[i]->dist < THRESH)	
 			voteArray[actionInstances[i]->actionType] += 1;
-
+		}
 		std::string bestAction = "ambiguous";
 		bool ambiguous = true;
 		float bestDist2 = actionInstances[0]->dist;
