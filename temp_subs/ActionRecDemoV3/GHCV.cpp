@@ -413,18 +413,22 @@ int processVideo(client_info_t *client_info)
 	actionTypes[3].count = 10;
 	actionTypes[3].sendKey = -1;
  */
-    int numActions = 2;
+    int numActions = 3;
     ActionType* actionTypes = new ActionType[numActions];
     actionTypes[0].actionName = "left";
     actionTypes[0].actionEnabled = true;
     actionTypes[0].count = 4;
-    actionTypes[0].sendKey = 1049;
+    actionTypes[0].sendKey = 1062;
     
     actionTypes[1].actionName = "right";
     actionTypes[1].actionEnabled = true;
     actionTypes[1].count = 4;
-    actionTypes[1].sendKey = 1062;
+    actionTypes[1].sendKey = 1064;
 
+    actionTypes[2].actionName = "idle";
+    actionTypes[2].actionEnabled = true;
+    actionTypes[2].count = 4;
+    actionTypes[2].sendKey = -1;
 
 	int* voteArray = new int[numActions];
 	int knearestk = 5;
