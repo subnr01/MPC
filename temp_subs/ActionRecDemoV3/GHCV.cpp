@@ -365,7 +365,7 @@ int processVideo(client_info_t *client_info)
     int sample_count = 0;
     int left_count = 0;
     int right_count = 0;
-    
+    int idle_couunt = 0; 
     
     //Assign the socket descriptor--Subbu
     int sockfd = client_info->connectfd;
@@ -748,7 +748,9 @@ int processVideo(client_info_t *client_info)
             if (!sendActionName.compare("right")) {
                 right_count++;
             }
-
+	     if (!sendActionName.compare("idle")) {
+                idle_count++;
+            }
         }
         
         /*
@@ -768,7 +770,11 @@ int processVideo(client_info_t *client_info)
             
         if ( sample_count > SAMPLING ) {
                 String message = " ";
-                if (left_count > right_count)
+		if(idle_count>left_count && idle_count>right_count)
+		{
+		    message = "idle";
+		}
+                else if (left_count > right_count)
                 {
                     message = "left";
                 } else if(right_count > left_count) {
@@ -783,7 +789,8 @@ int processVideo(client_info_t *client_info)
             sample_count = 0;
             left_count = 0;
             right_count = 0;
-        }
+            idle_count = 0;
+	 }
         
         
         

@@ -412,11 +412,16 @@ void *process_actions(void *x_void_ptr)
         else
             idle_count++;
     }
-    
+
+    if(idle_count>left_count && idle_count>right_count)
+    {
+	std::cout<<"ACTION DETECTED: idle"<<std::endl;
+    }    
+
     if(left_count>right_count)
     {
-        std::cout<<"ACTION DETECTED: left"<<std::endl;
-           }
+        std::cout<<"ACTION DETECTED: left"<<std::endl
+    }
     else if (left_count<right_count)
     {
         std::cout<<"ACTION DETECTED: right"<<std::endl;
@@ -424,11 +429,12 @@ void *process_actions(void *x_void_ptr)
     
     else
     {
-        
+       std::cout<<"ACTION DETECTED: none"<<std::endl;
     }
     
     left_count=0;
     right_count=0;
+    idle_count-0;
    }
     
     /* the function must return something - NULL will do */
