@@ -22,14 +22,14 @@
 #include <unistd.h>
 #define DELAY 2
 
-        #define SAMPLING 1
+        #define SAMPLING 0
 using namespace std;
 
 const double TIME_CALC_FRAMES = 1;
 
 const int DB = 0;
 
-const float THRESH = 0.7f;
+const float THRESH = 0.3f;
 
 const int WRITE_FRAMES = 200;
 
@@ -217,7 +217,7 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
     //std::string totalPrefix = "/home/ubuntu/project/MPC/temp_subs/ActionRecDemoV3/data/" + actionName;
     
     //std::string totalPrefix = "/Users/priyankakulkarni/Documents/Project/MPC/ActionRecDemoV3/thumb_temp/" + actionName;
-        std::string totalPrefix = "/home/ubuntu/project/MPC/temp_resized/" + actionName;
+        std::string totalPrefix = "/home/ubuntu/project/MPC/temp_nov18/" + actionName;
 
 	ActionInstance* ret = new ActionInstance;
 	ret->tData = new std::vector<FloatImage*>;
@@ -392,7 +392,7 @@ int processVideo(client_info_t *client_info)
 	int searchH = 100;
 	bool normalizing = true;
 
-	int actionFrames = 20;
+	int actionFrames = 16;
 /*
 	int numActions = 4;
 	ActionType* actionTypes = new ActionType[numActions];
@@ -821,7 +821,7 @@ int processVideo(client_info_t *client_info)
 
 		drawRectangle(dest_img, searchX, searchY, searchW, searchH, 255, 255, 255);
 		dest_img->getIplImage(display_temp);
-		cvShowImage("Template Locations", display_temp);
+		cvShowImage("Server View", display_temp);
 
 		//copy3ItoU(seg_r, seg_b, seg_g, segmentation_temp);
 		//cvShowImage("Segmentation", segmentation_temp);
