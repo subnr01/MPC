@@ -29,7 +29,7 @@ const double TIME_CALC_FRAMES = 1;
 
 const int DB = 0;
 
-const float THRESH = 0.3f;
+const float THRESH = 0.7f;
 
 const int WRITE_FRAMES = 200;
 
@@ -741,7 +741,7 @@ int processVideo(client_info_t *client_info)
        
  
         ssize_t sent = 0;
-        if ( sendActionName.compare("none")) {
+      //  if ( sendActionName.compare("none")) {
             sample_count++;
             if (!sendActionName.compare("left")) {
                 left_count++;
@@ -753,7 +753,7 @@ int processVideo(client_info_t *client_info)
 	     if (!sendActionName.compare("idle")) {
                 idle_count++;
             }
-        }
+      //  }
         
         /*
         if (!sendActionName.compare("up"))

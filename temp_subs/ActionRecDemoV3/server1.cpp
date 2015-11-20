@@ -71,7 +71,7 @@ int main(int argc, const char * argv[])
         //printf("Recieved\n");
         memset(buff, 0, receiveSize);
         received = recvfrom(sock, buff, receiveSize, 0, (struct sockaddr *)&client_addr, &addrlen);
-        
+//	printf("Received "+receiveSize);        
         if(received != -1)
         {
             for(int i = 0; i < received; i++)
