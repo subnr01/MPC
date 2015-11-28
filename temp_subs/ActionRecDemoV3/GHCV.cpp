@@ -32,7 +32,7 @@ const double TIME_CALC_FRAMES = 1;
 
 const int DB = 0;
 
-const float THRESH = 0.65f;
+const float THRESH = 0.64f;
 
 const int WRITE_FRAMES = 200;
 
@@ -393,8 +393,8 @@ int processVideo(client_info_t *client_info)
 
 	int searchX = 20;
 	int searchY = 0;
-	int searchW = 150;
-	int searchH = 100;
+	int searchW = 180;
+	int searchH = 101;
 	bool normalizing = true;
 
 	int actionFrames = 16;
