@@ -1,6 +1,8 @@
  // OpenCVTest.cpp : Defines the entry point for the console application.
 //
 
+
+#include <opencv2/imgproc/imgproc.hpp>
 #include <opencv/cv.h>
 #include <opencv/cxcore.h>
 #include <opencv/highgui.h>
@@ -20,6 +22,7 @@
 #include "LinearShapeMatch.h"
 #include "util.h"
 #include <unistd.h>
+#include "opencv2/highgui/highgui.hpp"
 #define DELAY 2
 
         #define SAMPLING 0
@@ -217,7 +220,7 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
     //std::string totalPrefix = "/home/ubuntu/project/MPC/temp_subs/ActionRecDemoV3/data/" + actionName;
     
     //std::string totalPrefix = "/Users/priyankakulkarni/Documents/Project/MPC/ActionRecDemoV3/thumb_temp/" + actionName;
-        std::string totalPrefix = "/home/ubuntu/project/MPC/temp_nov18/" + actionName;
+        std::string totalPrefix = "/home/ubuntu/project/MPC/temp_nov27/" + actionName;
 
 	ActionInstance* ret = new ActionInstance;
 	ret->tData = new std::vector<FloatImage*>;
@@ -366,7 +369,9 @@ int processVideo(client_info_t *client_info)
     int left_count = 0;
     int right_count = 0;
     int idle_count = 0; 
-    
+    int up_count = 0;
+    int down_count = 0;    
+
     //Assign the socket descriptor--Subbu
     int sockfd = client_info->connectfd;
     struct sockaddr_in client_addr = client_info->udp_client_addr;
@@ -413,7 +418,7 @@ int processVideo(client_info_t *client_info)
 	actionTypes[3].count = 10;
 	actionTypes[3].sendKey = -1;
  */
-    int numActions = 3;
+    int numActions = 4;
     ActionType* actionTypes = new ActionType[numActions];
     actionTypes[0].actionName = "left";
     actionTypes[0].actionEnabled = true;
@@ -425,10 +430,20 @@ int processVideo(client_info_t *client_info)
     actionTypes[1].count = 4;
     actionTypes[1].sendKey = 1064;
 
-    actionTypes[2].actionName = "idle";
+    actionTypes[2].actionName = "down";
     actionTypes[2].actionEnabled = true;
     actionTypes[2].count = 4;
-    actionTypes[2].sendKey = 1;
+    actionTypes[2].sendKey = 1068;
+
+    actionTypes[3].actionName = "up";
+    actionTypes[3].actionEnabled = true;
+    actionTypes[3].count = 4;
+    actionTypes[3].sendKey = 1066;
+
+    /* actionTypes[4].actionName = "down";
+    actionTypes[4].actionEnabled = true;
+    actionTypes[4].count = 4;
+    actionTypes[4].sendKey = 1068; */
 
 	int* voteArray = new int[numActions];
 	int knearestk = 5;
@@ -564,7 +579,8 @@ int processVideo(client_info_t *client_info)
 
 	clock_t prevTime = clock();
 	curTime = clock();
-
+	int index = 0;
+	char filename[80];
 	// enter main loop-- this runs the display as fast as possible
 	while(1)
 	{
@@ -601,7 +617,18 @@ int processVideo(client_info_t *client_info)
         vector<int> compression_params;
         compression_params.push_back(CV_IMWRITE_JPEG_QUALITY);
         compression_params.push_back(98);
-	
+	Mat gray;
+	cvtColor(mat_img, gray, CV_BGR2GRAY); 
+        Mat img_bw = gray > 128;
+	cout<<"stupid imwrite needs to write"<<endl;
+	sprintf(filename,"/home/ubuntu/project/MPC/temp_subs/ActionRecDemoV3/server_images/test_%d.png",index);
+	cout<<endl<<filename<<endl;
+        if (cv::imwrite(filename, img_bw)) {
+		cout<< "stupid imwrite"<<endl;
+	}
+        index++;
+
+
 
         bool bSuccess = cv::imwrite("~/project/MPC/temp_subs/ActionRecDemoV3/server_images/test.jpg", mat_img, compression_params);
 	    client_info->mydeque.pop_back();
@@ -753,6 +780,13 @@ int processVideo(client_info_t *client_info)
 	     if (!sendActionName.compare("idle")) {
                 idle_count++;
             }
+	    if (!sendActionName.compare("up")) {
+                up_count++;
+            }
+	    if (!sendActionName.compare("down")) {
+                down_count++;
+            }
+	
       //  }
         
         /*
@@ -769,7 +803,62 @@ int processVideo(client_info_t *client_info)
         }
 
         */
-            
+
+	if(sample_count >SAMPLING)
+	{
+		String message="";
+		int counts[4];
+		counts[0]=left_count;
+		counts[1]=right_count;
+		counts[2]=idle_count;
+		counts[3]=down_count;
+		counts[4]=up_count;
+		int largest = 0;
+		int lindex = 5;
+		for(int i=0;i<5;i++)
+		{
+			if(counts[i]>largest)
+			{	
+				largest = counts[i];
+				lindex=i;
+			}
+		}
+		switch(lindex)
+		{
+			case 0:
+			{
+				message="left";
+				break;
+			}
+			 case 1:
+                        {
+                                message="right";
+                                break;
+                        }
+			 case 2:
+                        {
+                                message="idle";
+                                break;
+                        }
+ 			 case 3:
+                        {
+                                message="down";
+                                break;
+                        }
+			 case 4:
+                        {
+                                message="up";
+                                break;
+                        }
+			case 5:
+                        {
+                                message="none";
+                                break;
+                        }
+		}
+
+       
+    /*
         if ( sample_count > SAMPLING ) {
                 String message = " ";
 		if(idle_count>left_count && idle_count>right_count)
@@ -786,12 +875,15 @@ int processVideo(client_info_t *client_info)
 		{
 		    message = "none";
 		}
+	*/
                 std::cout<< " \n SENDING TO THE CLIENT "<< message<< endl;
                 sent = sendto(sockfd, message.c_str(), message.size(), NULL, (struct sockaddr* )&client_addr, addr_len);
             sample_count = 0;
             left_count = 0;
             right_count = 0;
             idle_count = 0;
+	    up_count = 0;
+	    down_count = 0;
 	 }
         
         
@@ -821,7 +913,7 @@ int processVideo(client_info_t *client_info)
 
 		drawRectangle(dest_img, searchX, searchY, searchW, searchH, 255, 255, 255);
 		dest_img->getIplImage(display_temp);
-		cvShowImage("Server View", display_temp);
+//		cvShowImage("Server View", display_temp);
 
 		//copy3ItoU(seg_r, seg_b, seg_g, segmentation_temp);
 		//cvShowImage("Segmentation", segmentation_temp);
