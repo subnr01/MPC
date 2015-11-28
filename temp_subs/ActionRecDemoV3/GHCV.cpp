@@ -32,7 +32,7 @@ const double TIME_CALC_FRAMES = 1;
 
 const int DB = 0;
 
-const float THRESH = 0.7f;
+const float THRESH = 0.65f;
 
 const int WRITE_FRAMES = 200;
 
