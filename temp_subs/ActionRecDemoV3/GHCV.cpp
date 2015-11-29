@@ -220,7 +220,7 @@ ActionInstance* loadTemplateByName(std::string actionName, int actionType, int i
     //std::string totalPrefix = "/home/ubuntu/project/MPC/temp_subs/ActionRecDemoV3/data/" + actionName;
     
     //std::string totalPrefix = "/Users/priyankakulkarni/Documents/Project/MPC/ActionRecDemoV3/thumb_temp/" + actionName;
-        std::string totalPrefix = "/home/ubuntu/project/MPC/temp_nov27/" + actionName;
+        std::string totalPrefix = "/home/ubuntu/project/MPC/temp_nov18_copy/" + actionName;
 
 	ActionInstance* ret = new ActionInstance;
 	ret->tData = new std::vector<FloatImage*>;
@@ -418,7 +418,7 @@ int processVideo(client_info_t *client_info)
 	actionTypes[3].count = 10;
 	actionTypes[3].sendKey = -1;
  */
-    int numActions = 4;
+    int numActions = 3;
     ActionType* actionTypes = new ActionType[numActions];
     actionTypes[0].actionName = "left";
     actionTypes[0].actionEnabled = true;
@@ -430,16 +430,16 @@ int processVideo(client_info_t *client_info)
     actionTypes[1].count = 4;
     actionTypes[1].sendKey = 1064;
 
-    actionTypes[2].actionName = "down";
+    actionTypes[2].actionName = "up";
     actionTypes[2].actionEnabled = true;
     actionTypes[2].count = 4;
     actionTypes[2].sendKey = 1068;
-
+/*
     actionTypes[3].actionName = "up";
     actionTypes[3].actionEnabled = true;
     actionTypes[3].count = 4;
     actionTypes[3].sendKey = 1066;
-
+*/
     /* actionTypes[4].actionName = "down";
     actionTypes[4].actionEnabled = true;
     actionTypes[4].count = 4;
