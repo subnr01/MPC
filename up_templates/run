@@ -1,0 +1,7 @@
+for file in *.png; 
+do convert $file -resize 180x144 $file; 
+done
+
+for file in *.png; 
+do convert $file -crop 140x91+15+10 $file;
+done
